@@ -42,47 +42,42 @@ namespace MetricsDiscoveryInternal
     {
     public:
         // API 1.13:
-        // Updates.
-        virtual TCompletionCode OpenMetricsDevice( IMetricsDevice_1_13** metricsDevice );
-        virtual TCompletionCode OpenMetricsDeviceFromFile( const char* fileName, void* openParams, IMetricsDevice_1_13** metricsDevice );
-        virtual TCompletionCode OpenMetricsSubDevice( const uint32_t subDeviceIndex, IMetricsDevice_1_13** metricsDevice );
-        virtual TCompletionCode OpenMetricsSubDeviceFromFile( const uint32_t subDeviceIndex, const char* fileName, void* openParams, IMetricsDevice_1_13** metricsDevice );
+        virtual TCompletionCode OpenMetricsDevice( IMetricsDevice_1_13** metricsDevice ) final;
+        virtual TCompletionCode OpenMetricsDeviceFromFile( const char* fileName, void* openParams, IMetricsDevice_1_13** metricsDevice ) final;
+        virtual TCompletionCode OpenMetricsSubDevice( const uint32_t subDeviceIndex, IMetricsDevice_1_13** metricsDevice ) final;
+        virtual TCompletionCode OpenMetricsSubDeviceFromFile( const uint32_t subDeviceIndex, const char* fileName, void* openParams, IMetricsDevice_1_13** metricsDevice ) final;
 
         // API 1.11:
-        // New.
-        virtual TCompletionCode SaveMetricsDeviceToFile( const char* fileName, void* saveParams, IMetricsDevice_1_11* metricsDevice, const uint32_t minMajorApiVersion, const uint32_t minMinorApiVersion );
-        // Updates.
-        virtual TCompletionCode OpenMetricsDevice( IMetricsDevice_1_11** metricsDevice );
-        virtual TCompletionCode OpenMetricsDeviceFromFile( const char* fileName, void* openParams, IMetricsDevice_1_11** metricsDevice );
-        virtual TCompletionCode OpenMetricsSubDevice( const uint32_t subDeviceIndex, IMetricsDevice_1_11** metricsDevice );
-        virtual TCompletionCode OpenMetricsSubDeviceFromFile( const uint32_t subDeviceIndex, const char* fileName, void* openParams, IMetricsDevice_1_11** metricsDevice );
+        virtual TCompletionCode SaveMetricsDeviceToFile( const char* fileName, void* saveParams, IMetricsDevice_1_11* metricsDevice, const uint32_t minMajorApiVersion, const uint32_t minMinorApiVersion ) final;
+        virtual TCompletionCode OpenMetricsDevice( IMetricsDevice_1_11** metricsDevice ) final;
+        virtual TCompletionCode OpenMetricsDeviceFromFile( const char* fileName, void* openParams, IMetricsDevice_1_11** metricsDevice ) final;
+        virtual TCompletionCode OpenMetricsSubDevice( const uint32_t subDeviceIndex, IMetricsDevice_1_11** metricsDevice ) final;
+        virtual TCompletionCode OpenMetricsSubDeviceFromFile( const uint32_t subDeviceIndex, const char* fileName, void* openParams, IMetricsDevice_1_11** metricsDevice ) final;
 
         // API 1.10:
-        // Updates.
-        virtual TCompletionCode OpenMetricsDevice( IMetricsDevice_1_10** metricsDevice );
-        virtual TCompletionCode OpenMetricsDeviceFromFile( const char* fileName, void* openParams, IMetricsDevice_1_10** metricsDevice );
-        virtual TCompletionCode OpenMetricsSubDevice( const uint32_t subDeviceIndex, IMetricsDevice_1_10** metricsDevice );
-        virtual TCompletionCode OpenMetricsSubDeviceFromFile( const uint32_t subDeviceIndex, const char* fileName, void* openParams, IMetricsDevice_1_10** metricsDevice );
+        virtual TCompletionCode OpenMetricsDevice( IMetricsDevice_1_10** metricsDevice ) final;
+        virtual TCompletionCode OpenMetricsDeviceFromFile( const char* fileName, void* openParams, IMetricsDevice_1_10** metricsDevice ) final;
+        virtual TCompletionCode OpenMetricsSubDevice( const uint32_t subDeviceIndex, IMetricsDevice_1_10** metricsDevice ) final;
+        virtual TCompletionCode OpenMetricsSubDeviceFromFile( const uint32_t subDeviceIndex, const char* fileName, void* openParams, IMetricsDevice_1_10** metricsDevice ) final;
 
         // API 1.9:
-        // Updates.
-        virtual const TAdapterParamsLatest*   GetParams() const;
-        virtual const TSubDeviceParamsLatest* GetSubDeviceParams( const uint32_t subDeviceIndex );
-        virtual const TEngineParamsLatest*    GetEngineParams( const uint32_t subDeviceIndex, const uint32_t engineIndex );
-        virtual TCompletionCode               OpenMetricsSubDevice( const uint32_t subDeviceIndex, IMetricsDevice_1_5** metricsDevice );
-        virtual TCompletionCode               OpenMetricsSubDeviceFromFile( const uint32_t subDeviceIndex, const char* fileName, void* openParams, IMetricsDevice_1_5** metricsDevice );
+        virtual const TAdapterParamsLatest*   GetParams() const final;
+        virtual const TSubDeviceParamsLatest* GetSubDeviceParams( const uint32_t subDeviceIndex ) final;
+        virtual const TEngineParamsLatest*    GetEngineParams( const uint32_t subDeviceIndex, const uint32_t engineIndex ) final;
+        virtual TCompletionCode               OpenMetricsSubDevice( const uint32_t subDeviceIndex, IMetricsDevice_1_5** metricsDevice ) final;
+        virtual TCompletionCode               OpenMetricsSubDeviceFromFile( const uint32_t subDeviceIndex, const char* fileName, void* openParams, IMetricsDevice_1_5** metricsDevice ) final;
 
         // API 1.6:
-        virtual TCompletionCode Reset();
-        virtual TCompletionCode OpenMetricsDevice( IMetricsDevice_1_5** metricsDevice );
-        virtual TCompletionCode OpenMetricsDeviceFromFile( const char* fileName, void* openParams, IMetricsDevice_1_5** metricsDevice );
-        virtual TCompletionCode CloseMetricsDevice( IMetricsDevice_1_5* metricsDevice );
-        virtual TCompletionCode SaveMetricsDeviceToFile( const char* fileName, void* saveParams, IMetricsDevice_1_5* metricsDevice );
+        virtual TCompletionCode Reset() final;
+        virtual TCompletionCode OpenMetricsDevice( IMetricsDevice_1_5** metricsDevice ) final;
+        virtual TCompletionCode OpenMetricsDeviceFromFile( const char* fileName, void* openParams, IMetricsDevice_1_5** metricsDevice ) final;
+        virtual TCompletionCode CloseMetricsDevice( IMetricsDevice_1_5* metricsDevice ) final;
+        virtual TCompletionCode SaveMetricsDeviceToFile( const char* fileName, void* saveParams, IMetricsDevice_1_5* metricsDevice ) final;
 
     public:
         // Constructors & Destructor:
-        CAdapter( CAdapterGroup& adapterGroup, const TAdapterParamsLatest& params, CAdapterHandle& adapterHandle );
-        CAdapter( CAdapterGroup& adapterGroup );
+        CAdapter( const TAdapterParamsLatest& params, CAdapterHandle& adapterHandle );
+        CAdapter();
         virtual ~CAdapter();
 
         CAdapter( const CAdapter& )            = delete; // Delete copy-constructor
@@ -128,7 +123,5 @@ namespace MetricsDiscoveryInternal
         CSubDevices            m_subDevices;
         TSubDeviceParamsLatest m_subDeviceParams;
         TEngineParamsLatest    m_engineParams;
-
-        CAdapterGroup& m_adapterGroup; // Parent adapter group
     };
 } // namespace MetricsDiscoveryInternal

@@ -75,8 +75,8 @@ namespace MetricsDiscoveryInternal
     {
     public:
         // API 1.2:
-        virtual TOverrideParams_1_2* GetParams( void );
-        virtual TCompletionCode      SetOverride( TSetOverrideParams_1_2* params, uint32_t paramsSize );
+        virtual TOverrideParams_1_2* GetParams( void ) final;
+        virtual TCompletionCode      SetOverride( TSetOverrideParams_1_2* params, uint32_t paramsSize ) final;
 
     public:
         // Constructor & Destructor:

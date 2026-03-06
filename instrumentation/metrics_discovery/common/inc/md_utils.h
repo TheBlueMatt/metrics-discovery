@@ -15,6 +15,7 @@ SPDX-License-Identifier: MIT
 #include "metrics_discovery_internal_api.h"
 #include "md_debug.h"
 #include "iu_std.h"
+#include "instr_gt_driver_ifc.h"
 
 #include <algorithm>
 #include <stdio.h>
@@ -210,7 +211,7 @@ namespace MetricsDiscoveryInternal
     inline TCompletionCode SetPlatformMask( const uint32_t adapterId, TByteArrayLatest* platformMask, uint32_t* platformMaskLegacy, const bool appendToMask, PlatformIndices... platformIndices )
     {
         TCompletionCode ret                      = CC_ERROR_INVALID_PARAMETER;
-        auto            setPlatformMaskByteArray = [&]( TCompletionCode ret, const uint32_t platformIndex, const uint32_t adapterId )
+        auto            setPlatformMaskByteArray = [&]( const uint32_t platformIndex )
         {
             MD_CHECK_CC_RET_A( adapterId, ret );
             return SetBitInByteArray( platformMask, platformIndex, adapterId );
@@ -230,7 +231,7 @@ namespace MetricsDiscoveryInternal
                 ret = iu_zeromem( platformMask->Data, platformMask->Size ) ? CC_OK : CC_ERROR_GENERAL;
             }
 
-            ( ( ret = setPlatformMaskByteArray( ret, platformIndices, adapterId ) ), ... );
+            ( ( ret = setPlatformMaskByteArray( platformIndices ) ), ... );
             MD_CHECK_CC_RET_A( adapterId, ret );
         }
 
@@ -369,7 +370,7 @@ namespace MetricsDiscoveryInternal
     //
     //////////////////////////////////////////////////////////////////////////////
     template <class T>
-    static void DeleteArray( T** array, uint32_t count )
+    static void DeleteArray( T** array, [[maybe_unused]] uint32_t count )
     {
         MD_SAFE_DELETE_ARRAY( *array );
     }
@@ -401,7 +402,7 @@ namespace MetricsDiscoveryInternal
     //
     //////////////////////////////////////////////////////////////////////////////
     template <class T>
-    static void DeleteElement( T* elem )
+    static void DeleteElement( [[maybe_unused]] T* elem )
     {
         return;
     }

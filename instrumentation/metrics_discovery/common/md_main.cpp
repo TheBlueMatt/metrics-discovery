@@ -50,7 +50,7 @@ extern "C"
         MD_LOG_ENTER();
         MD_CHECK_PTR_RET( adapterGroup, CC_ERROR_INVALID_PARAMETER );
 
-        TCompletionCode retVal = CAdapterGroup::Open( (CAdapterGroup**) adapterGroup );
+        TCompletionCode retVal = CAdapterGroup::Open( reinterpret_cast<CAdapterGroup**>( adapterGroup ) );
 
         MD_LOG_EXIT();
         return retVal;

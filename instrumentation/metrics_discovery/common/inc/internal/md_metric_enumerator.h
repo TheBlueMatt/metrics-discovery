@@ -46,10 +46,10 @@ namespace MetricsDiscoveryInternal
     {
     public:
         // API 1.13:
-        virtual uint32_t               GetMetricPrototypeCount( void );
-        virtual IMetricPrototype_1_13* GetMetricPrototype( const uint32_t index );
-        virtual TCompletionCode        GetMetricPrototypes( const uint32_t index, uint32_t* count, IMetricPrototype_1_13** metrics );
-        virtual TCompletionCode        RemoveClonedMetricPrototype( IMetricPrototype_1_13* clonedPrototype );
+        virtual uint32_t               GetMetricPrototypeCount( void ) final;
+        virtual IMetricPrototype_1_13* GetMetricPrototype( const uint32_t index ) final;
+        virtual TCompletionCode        GetMetricPrototypes( const uint32_t index, uint32_t* count, IMetricPrototype_1_13** metrics ) final;
+        virtual TCompletionCode        RemoveClonedMetricPrototype( IMetricPrototype_1_13* clonedPrototype ) final;
 
     public:
         // Constructor & Destructor:

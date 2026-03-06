@@ -884,10 +884,10 @@ namespace MetricsDiscoveryInternal
                                 auto archEventIterator = std::find_if(
                                     archEvents.begin(),
                                     archEvents.end(),
-                                    [&]( const TArchEvent* archEvent )
+                                    [&]( const TArchEvent* archEventElement )
                                     {
-                                        return ( archEvent->m_name == eventMatch.suffix() ) &&
-                                            IsPlatformPresentInMask( archEvent->m_platformMask, m_device.GetPlatformIndex(), adapterId );
+                                        return ( archEventElement->m_name == eventMatch.suffix() ) &&
+                                            IsPlatformPresentInMask( archEventElement->m_platformMask, m_device.GetPlatformIndex(), adapterId );
                                     } );
 
                                 if( archEventIterator != archEvents.end() )
@@ -906,10 +906,10 @@ namespace MetricsDiscoveryInternal
                                     m_metricPrototypes.end(),
                                     [&]( CMetricPrototype* prototype )
                                     {
-                                        auto& event = prototype->GetHwEvent();
+                                        auto& prototypeHwEvent = prototype->GetHwEvent();
 
-                                        return ( event.m_name == eventMatch.suffix() ) &&
-                                            IsPlatformPresentInMask( event.m_archEvent.m_platformMask, m_device.GetPlatformIndex(), adapterId );
+                                        return ( prototypeHwEvent.m_name == eventMatch.suffix() ) &&
+                                            IsPlatformPresentInMask( prototypeHwEvent.m_archEvent.m_platformMask, m_device.GetPlatformIndex(), adapterId );
                                     } );
 
                                 if( prototypeIterator != m_metricPrototypes.end() )

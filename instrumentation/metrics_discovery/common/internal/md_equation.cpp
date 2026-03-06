@@ -436,10 +436,9 @@ namespace MetricsDiscoveryInternal
     {
         const uint32_t adapterId = m_device.GetAdapter().GetAdapterId();
 
-        std::list<uint64_t> equationStack  = {};
-        uint64_t            qwordValue     = 0ULL;
-        uint32_t            algorithmCheck = 0;
-        const uint32_t      elementsCount  = static_cast<uint32_t>( m_elementsVector.size() );
+        std::list<uint64_t> equationStack = {};
+        uint64_t            qwordValue    = 0ULL;
+        const uint32_t      elementsCount = static_cast<uint32_t>( m_elementsVector.size() );
 
         for( uint32_t i = 0; i < elementsCount; ++i )
         {
@@ -448,7 +447,6 @@ namespace MetricsDiscoveryInternal
             {
                 case EQUATION_ELEM_IMM_UINT64:
                     equationStack.push_back( element.ImmediateUInt64 );
-                    algorithmCheck++;
                     break;
 
                 case EQUATION_ELEM_LOCAL_COUNTER_SYMBOL:
@@ -469,7 +467,6 @@ namespace MetricsDiscoveryInternal
                     {
                         qwordValue = 0;
                         equationStack.push_back( qwordValue );
-                        algorithmCheck++;
                     }
                     else
                     {
@@ -522,7 +519,6 @@ namespace MetricsDiscoveryInternal
                     }
 
                     equationStack.push_back( qwordValue );
-                    algorithmCheck++;
                     break;
                 }
 
@@ -536,10 +532,8 @@ namespace MetricsDiscoveryInternal
                     // Pop two values from stack
                     const uint64_t valueLast = equationStack.back();
                     equationStack.pop_back();
-                    algorithmCheck--;
                     const uint64_t valuePrev = equationStack.back();
                     equationStack.pop_back();
-                    algorithmCheck--;
 
                     switch( element.Operation )
                     {
@@ -614,7 +608,6 @@ namespace MetricsDiscoveryInternal
                             return false;
                     }
                     equationStack.push_back( qwordValue );
-                    algorithmCheck++;
                     break;
                 }
 
@@ -627,8 +620,6 @@ namespace MetricsDiscoveryInternal
         }
         if( elementsCount > 0 )
         {
-            // here should be only 1 element on the list - the result (if the equation is fine)
-            MD_ASSERT_A( adapterId, algorithmCheck == 1 );
             qwordValue = ( equationStack.size() > 0 ) ? equationStack.back() : 0LL;
         }
         else

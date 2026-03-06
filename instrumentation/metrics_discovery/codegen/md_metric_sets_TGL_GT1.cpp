@@ -11,6 +11,7 @@ SPDX-License-Identifier: MIT
 //     Abstract:   C++ automated generated file that defines Metric Sets
 //                 for each Concurrent Group
 
+#include "md_per_platform_preamble.h"
 #include "md_concurrent_group.h"
 #include "md_metric_set.h"
 #include "md_metric_sets_TGL_GT1.h"

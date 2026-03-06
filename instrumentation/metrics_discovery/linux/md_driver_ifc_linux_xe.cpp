@@ -208,7 +208,7 @@ namespace MetricsDiscoveryInternal
     //     TCompletionCode                  - *CC_OK* means succeess
     //
     //////////////////////////////////////////////////////////////////////////////
-    TCompletionCode CDriverInterfaceLinuxXe::GetGpuCpuTimestamps( CMetricsDevice& device, uint64_t& gpuTimestamp, uint64_t& cpuTimestamp, uint32_t& cpuId, uint64_t& correlationIndicator )
+    TCompletionCode CDriverInterfaceLinuxXe::GetGpuCpuTimestamps( CMetricsDevice& device, uint64_t& gpuTimestamp, uint64_t& cpuTimestamp, [[maybe_unused]] uint32_t& cpuId, uint64_t& correlationIndicator )
     {
         auto& subDevices     = device.GetAdapter().GetSubDevices();
         auto  subDeviceIndex = device.GetSubDeviceIndex();
@@ -555,16 +555,17 @@ namespace MetricsDiscoveryInternal
     //////////////////////////////////////////////////////////////////////////////
     TCompletionCode CDriverInterfaceLinuxXe::OpenOaStream( CMetricsDevice& metricsDevice, uint32_t oaMetricSetId, uint32_t oaReportType, uint32_t oaReportSize, uint32_t timerPeriodExponent, uint32_t bufferSize, const GTDI_OA_BUFFER_TYPE oaBufferType )
     {
-        TCompletionCode         ret                                                                          = CC_ERROR_GENERAL;
-        int32_t                 oaEventFd                                                                    = -1;
-        uint32_t                requiredEngineInstance                                                       = -1;
-        const bool              isOamRequested                                                               = IsOamRequested( oaReportType, oaBufferType );
-        const uint32_t          subDeviceIndex                                                               = metricsDevice.GetSubDeviceIndex();
-        auto                    subDevices                                                                   = metricsDevice.GetAdapter().GetSubDevices();
-        auto                    engine                                                                       = TEngineParamsLatest{};
-        auto                    param                                                                        = drm_xe_observation_param{};
-        drm_xe_ext_set_property properties[DRM_XE_OA_PROPERTY_NO_PREEMPT - DRM_XE_OA_EXTENSION_SET_PROPERTY] = {};
-        uint32_t                currentIndex                                                                 = 0;
+        TCompletionCode ret                    = CC_ERROR_GENERAL;
+        int32_t         oaEventFd              = -1;
+        uint32_t        requiredEngineInstance = -1;
+        const bool      isOamRequested         = IsOamRequested( oaReportType, oaBufferType );
+        const uint32_t  subDeviceIndex         = metricsDevice.GetSubDeviceIndex();
+        auto            subDevices             = metricsDevice.GetAdapter().GetSubDevices();
+        auto            engine                 = TEngineParamsLatest{};
+        auto            param                  = drm_xe_observation_param{};
+        uint32_t        currentIndex           = 0;
+
+        drm_xe_ext_set_property properties[DRM_XE_OA_PROPERTY_WAIT_NUM_REPORTS - DRM_XE_OA_EXTENSION_SET_PROPERTY] = {};
 
         auto isValidValue = []( uint32_t value )
         {
@@ -1205,7 +1206,7 @@ namespace MetricsDiscoveryInternal
     //     TCompletionCode                         - *CC_OK* means success
     //
     //////////////////////////////////////////////////////////////////////////////
-    TCompletionCode CDriverInterfaceLinuxXe::GetGeometryTopology( std::vector<uint8_t>& buffer, CMetricsDevice& metricsDevice )
+    TCompletionCode CDriverInterfaceLinuxXe::GetGeometryTopology( std::vector<uint8_t>& buffer, [[maybe_unused]] CMetricsDevice& metricsDevice )
     {
         TCompletionCode ret = QueryDrm( DRM_XE_DEVICE_QUERY_GT_TOPOLOGY, buffer );
 
@@ -1706,7 +1707,7 @@ namespace MetricsDiscoveryInternal
     //     TCompletionCode               - *CC_OK* means success
     //
     //////////////////////////////////////////////////////////////////////////////
-    TCompletionCode CDriverInterfaceLinuxXe::GetOaBufferSupportedSizes( const uint32_t platformId, uint32_t& minSize, uint32_t& maxSize )
+    TCompletionCode CDriverInterfaceLinuxXe::GetOaBufferSupportedSizes( [[maybe_unused]] const uint32_t platformId, uint32_t& minSize, uint32_t& maxSize )
     {
         if( m_xeObservationCapabilities.IsConfigurableOaBufferSize )
         {

@@ -1,49 +1,19 @@
-# Copyright © 2020-2026, Intel Corporation
+#=========================== begin_copyright_notice ============================
 #
-# Permission is hereby granted, free of charge, to any person obtaining a
-# copy of this software and associated documentation files (the "Software"),
-# to deal in the Software without restriction, including without limitation
-# the rights to use, copy, modify, merge, publish, distribute, sublicense,
-# and/or sell copies of the Software, and to permit persons to whom the
-# Software is furnished to do so, subject to the following conditions:
+# Copyright (C) 2020-2026 Intel Corporation
 #
-# The above copyright notice and this permission notice shall be included
-# in all copies or substantial portions of the Software.
+# SPDX-License-Identifier: MIT
 #
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
-# IN THE SOFTWARE.
-#################################################################################
-cmake_minimum_required (VERSION 3.5)
+#============================ end_copyright_notice =============================
+
+cmake_minimum_required (VERSION 3.14)
+
+# Uncomment for logs during build (during 'make' command)
 #set (CMAKE_VERBOSE_MAKEFILE ON)
 
 #################################################################################
-# CMAKE POLICIES
+# PROJECT
 #################################################################################
-# Cmake policies based on instr.cmake
-if (COMMAND cmake_policy)
-    if (POLICY CMP0005)
-        # automatic quoting of brackets
-        cmake_policy (SET CMP0005 NEW)
-    endif (POLICY CMP0005)
-
-    if (POLICY CMP0015)
-        # .vcproj contains relative paths to additional library directories, thus we need to be able to cope with that
-        cmake_policy (SET CMP0015 NEW)
-    endif (POLICY CMP0015)
-endif (COMMAND cmake_policy)
-
-# Uncomment for logs during build (during 'make' comamnd)
-#set (CMAKE_VERBOSE_MAKEFILE ON)
-
-#################################################################################
-# TARGET
-#################################################################################
-
 set (PROJECT_NAME metrics_discovery)
 project (${PROJECT_NAME})
 
@@ -63,14 +33,6 @@ else ()
     include (../instr.cmake NO_POLICY_SCOPE) # windows and others
 endif()
 
-# find libdrm devel package
-find_library(libdrm drm)
-if (${libdrm} STREQUAL libdrm-NOTFOUND)
-    message(FATAL_ERROR "You need to install libdrm-dev or libdrm-devel")
-else ()
-    message(STATUS "libdrm-dev found as ${libdrm}")
-endif ()
-    
 #################################################################################
 # SOURCES
 #################################################################################
@@ -153,7 +115,7 @@ set (_SOURCES ${_SOURCES}
     )
 
 # platform dependent
-if ("${PLATFORM}" STREQUAL Windows) # windows
+if (${PLATFORM} STREQUAL Windows) # windows
     set (_SOURCES ${_SOURCES}
         # driver interface
         ${BS_DIR_INSTRUMENTATION}/metrics_discovery/windows/md_driver_ifc_win.cpp
@@ -165,8 +127,8 @@ if ("${PLATFORM}" STREQUAL Windows) # windows
         # resource file
         ${BS_DIR_INSTRUMENTATION}/metrics_discovery/md.rc
         # instr utils
-        ${BS_DIR_INSTRUMENTATION}/utils/windows/umd/iu_std.cpp
         ${BS_DIR_INSTRUMENTATION}/utils/windows/umd/iu_os.cpp
+        ${BS_DIR_INSTRUMENTATION}/utils/windows/umd/iu_std.cpp
         )
 
     # linux files in solution explorer
@@ -177,23 +139,28 @@ if ("${PLATFORM}" STREQUAL Windows) # windows
         ${BS_DIR_INSTRUMENTATION}/metrics_discovery/linux/md_driver_ifc_linux_xe.cpp
         ${BS_DIR_INSTRUMENTATION}/metrics_discovery/linux/md_sub_devices_linux.cpp
         # instr utils
-        ${BS_DIR_INSTRUMENTATION}/utils/linux/iu_std.cpp
         ${BS_DIR_INSTRUMENTATION}/utils/linux/iu_os.cpp
+        ${BS_DIR_INSTRUMENTATION}/utils/linux/iu_std.cpp
         )
+
     # linux files will not be being built
     set_source_files_properties (
         ${_LINUX_SOURCES_ON_WINDOWS} PROPERTIES HEADER_FILE_ONLY ON
         )
+
     set (_SOURCES ${_SOURCES} ${_LINUX_SOURCES_ON_WINDOWS})
-elseif ("${PLATFORM}" STREQUAL linux) # linux
+
+elseif (${PLATFORM} STREQUAL linux) # linux
     set (_SOURCES ${_SOURCES}
-    ${BS_DIR_INSTRUMENTATION}/metrics_discovery/linux/md_driver_ifc_linux_common.cpp
-    ${BS_DIR_INSTRUMENTATION}/metrics_discovery/linux/md_driver_ifc_linux_perf.cpp
-    ${BS_DIR_INSTRUMENTATION}/metrics_discovery/linux/md_driver_ifc_linux_xe.cpp
-    ${BS_DIR_INSTRUMENTATION}/metrics_discovery/linux/md_sub_devices_linux.cpp
-    ${BS_DIR_INSTRUMENTATION}/utils/linux/iu_std.cpp
-    ${BS_DIR_INSTRUMENTATION}/utils/linux/iu_os.cpp
-    )
+        # driver interface
+        ${BS_DIR_INSTRUMENTATION}/metrics_discovery/linux/md_driver_ifc_linux_common.cpp
+        ${BS_DIR_INSTRUMENTATION}/metrics_discovery/linux/md_driver_ifc_linux_perf.cpp
+        ${BS_DIR_INSTRUMENTATION}/metrics_discovery/linux/md_driver_ifc_linux_xe.cpp
+        ${BS_DIR_INSTRUMENTATION}/metrics_discovery/linux/md_sub_devices_linux.cpp
+        # instr utils
+        ${BS_DIR_INSTRUMENTATION}/utils/linux/iu_os.cpp
+        ${BS_DIR_INSTRUMENTATION}/utils/linux/iu_std.cpp
+        )
 else ()
     message ("-- Using platform is ${PLATFORM}")
 endif ()
@@ -213,7 +180,7 @@ file (GLOB_RECURSE _HEADERS
     ${BS_DIR_INSTRUMENTATION}/metrics_discovery/codegen/*.h
     )
 # platform dependent
-if ("${PLATFORM}" STREQUAL Windows) # windows
+if (${PLATFORM} STREQUAL Windows) # windows
     file (GLOB_RECURSE _WINDOWS_HEADERS
         ${BS_DIR_INSTRUMENTATION}/utils/windows/inc/*.h
         ${BS_DIR_INSTRUMENTATION}/metrics_discovery/windows/inc/*.h
@@ -233,7 +200,7 @@ if ("${PLATFORM}" STREQUAL Windows) # windows
         ${BS_DIR_INSTRUMENTATION}/metrics_discovery/external/drm/*.h
         )
     set (_HEADERS ${_HEADERS} ${_LINUX_HEADERS})
-elseif ("${PLATFORM}" STREQUAL linux) # linux
+elseif (${PLATFORM} STREQUAL linux) # linux
     file (GLOB_RECURSE _LINUX_HEADERS
         ${BS_DIR_INSTRUMENTATION}/utils/linux/inc/*.h
         ${BS_DIR_INSTRUMENTATION}/metrics_discovery/linux/inc/*.h
@@ -263,8 +230,9 @@ source_group ("Source Files\\codegen"                      "${BS_DIR_INSTRUMENTA
 source_group ("Source Files\\internal"                     "${BS_DIR_INSTRUMENTATION}/metrics_discovery/common/internal/.*.cpp")
 source_group ("Source Files\\internal\\concurrent_groups"  "${BS_DIR_INSTRUMENTATION}/metrics_discovery/common/internal/concurrent_groups/.*.cpp")
 
-# common & platform dependent
-if ("${PLATFORM}" STREQUAL Windows) # windows
+# platform dependent
+if (${PLATFORM} STREQUAL Windows) # windows
+    # common
     source_group ("Header Files\\api\\performance_api"      "${BS_DIR_INC}/common/instrumentation/api/.*performance_api.h")
     source_group ("Header Files"                            "(${BS_DIR_INSTRUMENTATION}/metrics_discovery/common/inc/.*.h)|(${BS_DIR_INSTRUMENTATION}/metrics_discovery/windows/inc/.*.h)")
     source_group ("Header Files\\iu"                        "(${BS_DIR_INSTRUMENTATION}/utils/common/inc/.*.h)|(${BS_DIR_INSTRUMENTATION}/utils/windows/inc/.*.h)")
@@ -276,14 +244,15 @@ if ("${PLATFORM}" STREQUAL Windows) # windows
     source_group ("Source Files\\iu"                        "(${BS_DIR_INSTRUMENTATION}/utils/common/.*.c)|(${BS_DIR_INSTRUMENTATION}/utils/windows/umd/.*.cpp)|(${BS_DIR_INSTRUMENTATION}/utils/windows/.*.cpp)")
     source_group ("Source Files\\performance_api"           "(${BS_DIR_INSTRUMENTATION}/metrics_discovery/windows/.*performance.*.cpp)")
 
-    # linux files in solution explorer
+    # add linux headers to solution explorer
     source_group ("Header Files\\linux"                     "(${BS_DIR_INSTRUMENTATION}/metrics_discovery/linux/inc/.*.h)")
     source_group ("Header Files\\linux\\iu"                 "(${BS_DIR_INSTRUMENTATION}/utils/linux/inc/.*.h)")
     source_group ("Header Files\\external\\drm"             "(${BS_DIR_INSTRUMENTATION}/metrics_discovery/external/drm/.*.h)")
 
     source_group ("Source Files\\linux"                     "(${BS_DIR_INSTRUMENTATION}/metrics_discovery/linux/.*.cpp)")
     source_group ("Source Files\\linux\\iu"                 "(${BS_DIR_INSTRUMENTATION}/utils/linux/.*.cpp)")
-elseif ("${PLATFORM}" STREQUAL linux) # linux
+elseif (${PLATFORM} STREQUAL linux) # linux
+    # common
     source_group ("Header Files"                            "(${BS_DIR_INSTRUMENTATION}/metrics_discovery/common/inc/.*.h)|(${BS_DIR_INSTRUMENTATION}/metrics_discovery/linux/inc/.*.h)")
     source_group ("Header Files\\iu"                        "(${BS_DIR_INSTRUMENTATION}/utils/common/inc/.*.h)|(${BS_DIR_INSTRUMENTATION}/utils/linux/inc/.*.h)")
 
@@ -294,53 +263,38 @@ else ()
 endif ()
 
 #################################################################################
-# LINK LIBS
+# TARGET FLAGS (add_library & link_libraries)
 #################################################################################
-if ("${PLATFORM}" STREQUAL Windows) # windows
-    add_library (${PROJECT_NAME} SHARED ${HEADERS} ${SOURCES})
-
-    # project specific target settings
+# project specific target settings
+if (${PLATFORM} STREQUAL Windows) # windows
+    # add library
+    add_library (${PROJECT_NAME} SHARED ${SOURCES})
+    target_sources (${PROJECT_NAME} PRIVATE ${HEADERS})
     instr_target_settings (${PROJECT_NAME})
-    set (PUBLIC_EXPORTS
-        /EXPORT:OpenAdapterGroup
-        /EXPORT:OpenMetricsDevice
-        /EXPORT:CloseMetricsDevice
-        /EXPORT:OpenMetricsDeviceFromFile
-        /EXPORT:OpenPerformanceInterface
-        /EXPORT:ClosePerformanceInterface)
-    instr_set_linker_flags ("RELEASE" "${PUBLIC_EXPORTS}")
     set (CMAKE_CXX_STANDARD_LIBRARIES "")
     set (CMAKE_C_STANDARD_LIBRARIES "")
-    set_target_properties(${PROJECT_NAME} PROPERTIES VS_GLOBAL_DriverTargetPlatform Universal)
-    set_target_properties(${PROJECT_NAME} PROPERTIES VS_PLATFORM_TOOLSET "WindowsApplicationForDrivers10.0")
-    set_property (TARGET ${PROJECT_NAME} PROPERTY OUTPUT_NAME ${LIB}${ARCH})
+    set_target_properties (${PROJECT_NAME} PROPERTIES OUTPUT_NAME ${LIB}${ARCH})
+    set_target_properties (${PROJECT_NAME} PROPERTIES VS_GLOBAL_DriverTargetPlatform Universal)
+    set_target_properties (${PROJECT_NAME} PROPERTIES VS_PLATFORM_TOOLSET "WindowsApplicationForDrivers10.0")
     target_link_libraries (${PROJECT_NAME}
         dxgi.lib    # used in performance_api_dx12.cpp
         dxcore.lib  # used in performance_api_dx12.cpp
         gdi32.lib
         )
-    windows_apps_props_universal(${PROJECT_NAME})
-elseif ("${PLATFORM}" STREQUAL linux) # linux
-    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--no-undefined")
-    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-z,defs")
-    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-z,noexecstack")
-    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-z,relro")
-    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-z,now")
-    add_library(${PROJECT_NAME} SHARED ${SOURCES})
-    target_link_libraries(
-        ${PROJECT_NAME}                 # metrics_discovery
-        ${DRM_LIB_PATH}                 # drm
-        rt
-        pthread
-        stdc++
-    )
-    set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
-    set_metrics_discovery_version()
-    set_property(TARGET ${PROJECT_NAME} PROPERTY VERSION ${MD_VERSION})
-    set_property(TARGET ${PROJECT_NAME} PROPERTY SOVERSION ${MD_VERSION_MAJOR})
-    set_property(TARGET ${PROJECT_NAME} PROPERTY OUTPUT_NAME ${LIB})
+    windows_apps_props_universal (${PROJECT_NAME})
+elseif (${PLATFORM} STREQUAL linux) # linux
+    # add library
+    add_library (${PROJECT_NAME} SHARED ${SOURCES})
+    target_sources (${PROJECT_NAME} PRIVATE ${HEADERS})
+    set_metrics_discovery_version ()
+    set_target_properties (${PROJECT_NAME} PROPERTIES POSITION_INDEPENDENT_CODE ON)
+    set_target_properties (${PROJECT_NAME} PROPERTIES OUTPUT_NAME ${LIB})
+else ()
+    message ("-- Using platform is ${PLATFORM}")
 endif ()
 
+# version
+set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${MD_VERSION} SOVERSION ${MD_VERSION_MAJOR})
 
 #################################################################################
 # INCLUDES
@@ -352,7 +306,7 @@ set (COMMON_TARGET_INCLUDE_DIRECTORIES
     ${BS_DIR_INSTRUMENTATION}/metrics_discovery/codegen
     )
 
-if ("${PLATFORM}" STREQUAL Windows) # windows
+if (${PLATFORM} STREQUAL Windows) # windows
     target_include_directories (${PROJECT_NAME} PUBLIC
         ${COMMON_TARGET_INCLUDE_DIRECTORIES}
         # instrumentation
@@ -363,9 +317,8 @@ if ("${PLATFORM}" STREQUAL Windows) # windows
         # vulkan
         ${BS_DIR_VULKAN}/Core/PCH/vulkan
         )
-elseif ("${PLATFORM}" STREQUAL linux)
-    # generic
-    include_directories (
+elseif (${PLATFORM} STREQUAL linux) # linux
+    target_include_directories (${PROJECT_NAME} PUBLIC
         ${COMMON_TARGET_INCLUDE_DIRECTORIES}
         # external
         ${BS_DIR_EXTERNAL}/drm
@@ -379,120 +332,201 @@ elseif ("${PLATFORM}" STREQUAL linux)
         ${BS_DIR_INC}/common/instrumentation
         ${BS_DIR_INC}/common/instrumentation/api
         )
-
-    # drm
-    if (NOT "${LIBDRM_SRC}" STREQUAL "")
-        message (STATUS "using LIBDRM_SRC = ${LIBDRM_SRC}")
-        include_directories (
-            ${LIBDRM_SRC}
-            ${LIBDRM_SRC}/include/drm
-            ${LIBDRM_SRC}/intel
-        )
-    endif ()
 else ()
     message ("-- Using platform is ${PLATFORM}")
 endif ()
 
 #################################################################################
-# FLAGS
+# COMPILER FLAGS
 #################################################################################
 # platform specific
-if ("${PLATFORM}" STREQUAL Windows) # windows
-    # Excludes metrics for unreleased platforms for non-internal builds.
-    # To enable metrics, just remove the flag for a given platform, do not set it to 1
-    set (DISABLED_METRICS )
-
+if (${PLATFORM} STREQUAL Windows) # windows
     bs_set_extra_target_properties (${PROJECT_NAME}
-        METRICS_DISCOVERY
-        ISTDLIB_UMD
         USERMODE_DRIVER
         STD_CALL
         )
-    if (NOT "${BUILD_TYPE}" STREQUAL "debug")
-        add_definitions(-W4)     # display warnings level 4
-        add_definitions(-WX)     # treat warnings as errors
-        add_definitions(-wd4189) # 'adapterId': local variable is initialized but not referenced
-        add_definitions(-wd4100) # 'adapterId': unreferenced formal parameter
-    endif ()
-
-    # set DISABLED_METRICS
-    set_property (TARGET ${PROJECT_NAME} APPEND PROPERTY COMPILE_DEFINITIONS
-        $<$<CONFIG:Release>: ${DISABLED_METRICS}>
+    set (COMMON_COMPILE_OPTIONS
+        /Zp8 # struct member alignment - 8 bytes
         )
-elseif ("${PLATFORM}" STREQUAL "linux") # linux
+    target_compile_options (
+        ${PROJECT_NAME} PRIVATE
+        $<$<CONFIG:Release>:
+            ${COMMON_COMPILE_OPTIONS}
+            /W4     # display warnings level 4
+            /WX     # treats warnings as errors
+            /wd4100 # 'adapterId': unreferenced parameter
+            /Ot     # favor fast code
+            /O2     # favor speed
+            /Gy     # function-level linking
+            /GL     # whole program optimization
+        >
+        $<$<CONFIG:ReleaseInternal>:
+            ${COMMON_COMPILE_OPTIONS}
+            /W4     # display warnings level 4
+            /WX     # treats warnings as errors
+            /Ot     # favor fast code
+            /O2     # favor speed
+            /Gy     # function-level linking
+            /GL     # whole program optimization
+        >
+        $<$<CONFIG:Debug>:
+            ${COMMON_COMPILE_OPTIONS}
+        >
+        )
+
+elseif (${PLATFORM} STREQUAL linux) # linux
     # select ENABLED_METRICS
     # include only ENABLED_METRICS or all metrics if not defined.
     if (DEFINED ENABLED_METRICS)
         message ("Enable MDAPI metrics for platforms: ${ENABLED_METRICS}")
         foreach (hwPlatform ${ENABLED_METRICS})
-            add_definitions(-DMD_INCLUDE_${hwPlatform}_METRICS)
+            target_compile_definitions (${PROJECT_NAME} PRIVATE MD_INCLUDE_${hwPlatform}_METRICS)
         endforeach ()
     else ()
         message ("Enable MDAPI metrics for platforms: ALL")
     endif ()
 
-    # configuration specific defines
-    if ("${BUILD_TYPE}" STREQUAL "release")
-        add_definitions(-DNDEBUG)
-        # security compiler flags
-        add_definitions(-O2 -Wformat)
-    elseif ("${BUILD_TYPE}" STREQUAL "release-internal" OR
-            "${BUILD_TYPE}" STREQUAL "releaseinternal")
-            add_definitions(-D_RELEASE_INTERNAL)
-            add_definitions(-DNDEBUG)
-    elseif ("${BUILD_TYPE}" STREQUAL "debug")
-        add_definitions(-D_DEBUG)
+    set (COMMON_COMPILE_OPTIONS
+        -Wall                    # enables all compiler's warning messages
+        #-Wfatal-errors          # abort compilation on the first error occurred
+        -Wextra                  # enables a comprehensive set of warning options, providing a high level of warning coverage for potential issues
+        -Wno-unknown-pragmas     # allows unknown pragmas (such as #pragma region)
+        -fpack-struct=8          # struct member alignment - 8 bytes
+        -Wformat                 # enables format string checking warnings during compilation
+        -Wformat-security        # warns about potentially insecure format string usages
+        -Werror=format-security  # treats format string security warnings as errors
+        -Wno-comment             # allows multi-line comments
+        -fstack-protector-strong # enables stack protection for vulnerable functions that contain: An array of any size and type
+        -fdiagnostics-color=auto # color=auto only to colorize compiler output
+        #-pedantic               # warns on language extensions not in the standard
+        #-pedantic-errors        # treats those warnings as errors
+        -Wshadow                 # warns when a variable shadows another
+        #-Wcast-qual             # warns on casts that remove type qualifiers (e.g. const)
+        #-Wcast-align            # warns on potentially misaligned pointer casts
+        #-Wstrict-aliasing=2     # strict aliasing rule violations
+        #-Wundef                 # warns when an undefined macro is used in #if
+        -Wunused                 # warns on any unused entity
+        #-Wnon-virtual-dtor      # warns on non-virtual destructors in polymorphic classes
+        #-Woverloaded-virtual    # warns when a derived class hides a virtual function
+        )
+
+    if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+        set (COMMON_COMPILE_OPTIONS ${COMMON_COMPILE_OPTIONS}
+            -Wno-extern-c-compat # disables "empty struct has size 0 in C, size 1 in C++" warning
+            )
     endif ()
 
-    add_definitions(-Wall)                    # enables all compiler's warning messages
-    add_definitions(-Wextra)                  # enables a comprehensive set of warning options, providing a high level of warning coverage for potential issues
-    add_definitions(-Wformat)                 # enables format string checking warnings during compilation
-    add_definitions(-Wformat-security)        # warns about potentially insecure format string usages
-    add_definitions(-fdiagnostics-color=auto) # color=auto only to colorize compiler output
-    add_definitions(-fstack-protector)
-    add_definitions(-Wno-unused)
-    add_definitions(-Wno-strict-aliasing)
-    add_definitions(-Wno-unknown-pragmas)
-    add_definitions(-Wno-comment)
-    add_definitions(-msse)
+    # configuration specific defines
+    if ("${BUILD_TYPE}" STREQUAL "release")
+        set (COMMON_COMPILE_OPTIONS ${COMMON_COMPILE_OPTIONS}
+            -DNDEBUG
+            )
+    elseif ("${BUILD_TYPE}" STREQUAL "release-internal" OR
+            "${BUILD_TYPE}" STREQUAL "releaseinternal")
+        set (COMMON_COMPILE_OPTIONS ${COMMON_COMPILE_OPTIONS}
+            -D_RELEASE_INTERNAL
+            -DNDEBUG
+            )
+    elseif ("${BUILD_TYPE}" STREQUAL "debug")
+        set (COMMON_COMPILE_OPTIONS ${COMMON_COMPILE_OPTIONS}
+            -D_DEBUG
+            -g
+            )
+    endif ()
+
+    # configuration specific defines
     if ("${BUILD_TYPE}" STREQUAL "release" OR
         "${BUILD_TYPE}" STREQUAL "release-internal" OR
         "${BUILD_TYPE}" STREQUAL "releaseinternal")
-        add_definitions(-Werror=format-security) # treat format string security warnings as errors
-        add_definitions(-Werror)                 # treat warning as errors
-        add_definitions(-fvisibility=hidden)     # to disable exporting internal symbols (by default gcc exports all symbols)
-        add_definitions(-flto)                   # enables Link-Time Optimization (LTO)
-        add_definitions(-fPIC)                   # generates position-independent code during the compilation phase
-        add_definitions(-fPIE)                   # generates position-independent executables during the compilation phase
-        add_definitions(-pie)                    # produces position-independent executables during the linking phase
-    elseif ("${BUILD_TYPE}" STREQUAL "debug")
-        add_definitions(-g)
-    endif ()
-    # C++ specific
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-reorder")
-
-    # common
-    add_definitions(-DMD_USE_PERF)
-    add_definitions(-DMETRICS_DISCOVERY)
-    add_definitions(-fno-inline)
-
-    if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-        add_definitions(-Wno-extern-c-compat) # disable "empty struct has size 0 in C, size 1 in C++" warning
+        set (COMMON_COMPILE_OPTIONS ${COMMON_COMPILE_OPTIONS}
+            -O3                 # optimize for speed with conforming optimizations
+            -Werror             # treats warning as errors
+            -fvisibility=hidden # hides non-exported symbols
+            -flto               # enables Link-Time Optimization (LTO)
+            -fPIC               # generates position-independent code during the compilation phase
+            )
     endif ()
 
-    # to enable x86 build on x64 host
+    if (NOT CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
+        set (COMMON_COMPILE_OPTIONS ${COMMON_COMPILE_OPTIONS}
+            -msse
+            )
+    endif ()
+
     if ("${TARGET_ARCH}" STREQUAL "32")
-        # flag is needed for both, compiler and linker
-        add_definitions(-m32)
-        set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -m32")
-    # to enable x64 build on x86 host
+        set (COMMON_COMPILE_OPTIONS ${COMMON_COMPILE_OPTIONS}
+            -m32 # to enable x86 build on x64 host
+            )
     elseif("${TARGET_ARCH}" STREQUAL "64" AND ${HOST_ARCH} STREQUAL "32")
-        # flag is needed for both, compiler and linker
-        add_definitions(-m64)
-        set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -m64")
+        set (COMMON_COMPILE_OPTIONS ${COMMON_COMPILE_OPTIONS}
+            -m64 # to enable x64 build on x86 host
+            )
     endif ()
+
+    target_compile_options (
+        ${PROJECT_NAME} PRIVATE
+        ${COMMON_COMPILE_OPTIONS}
+        )
+
 else ()
     message ("-- Using platform is ${PLATFORM}")
+endif ()
+
+#################################################################################
+# LINKER FLAGS
+#################################################################################
+if (${PLATFORM} STREQUAL Windows) # windows
+    set (PUBLIC_EXPORTS
+        /EXPORT:OpenAdapterGroup
+        /EXPORT:OpenMetricsDevice
+        /EXPORT:CloseMetricsDevice
+        /EXPORT:OpenMetricsDeviceFromFile
+        /EXPORT:OpenPerformanceInterface
+        /EXPORT:ClosePerformanceInterface)
+    instr_set_linker_flags ("RELEASE"         "${PUBLIC_EXPORTS} /LTCG /INCREMENTAL:NO /OPT:ICF /OPT:REF")
+    instr_set_linker_flags ("RELEASEINTERNAL" "${PUBLIC_EXPORTS} /LTCG /INCREMENTAL:NO /OPT:ICF /OPT:REF")
+    instr_set_linker_flags ("DEBUG"           "${PUBLIC_EXPORTS}")
+elseif (${PLATFORM} STREQUAL linux) # linux
+    set (COMMON_LINK_OPTIONS
+        LINKER:--no-undefined
+        LINKER:-z,defs
+        LINKER:-z,noexecstack
+        LINKER:-z,relro
+        LINKER:-z,now
+        )
+    if ("${TARGET_ARCH}" STREQUAL "32")
+        set (COMMON_LINK_OPTIONS ${COMMON_LINK_OPTIONS}
+            LINKER:-m32 # to enable x86 build on x64 host
+            )
+    elseif("${TARGET_ARCH}" STREQUAL "64" AND ${HOST_ARCH} STREQUAL "32")
+        set (COMMON_LINK_OPTIONS ${COMMON_LINK_OPTIONS}
+            LINKER:-m64 # to enable x64 build on x86 host
+            )
+    endif ()
+    target_link_options (
+        ${PROJECT_NAME} PRIVATE
+        ${COMMON_LINK_OPTIONS}
+        )
+else ()
+    message ("-- Using platform is ${PLATFORM}")
+endif ()
+
+#################################################################################
+# LINK LIBRARIES
+#################################################################################
+if (${PLATFORM} STREQUAL linux)
+    # find libdrm-dev
+    find_library (libdrm drm)
+    if (${libdrm} STREQUAL libdrm-NOTFOUND)
+        message (FATAL_ERROR "You need to install libdrm-dev")
+    else ()
+        message (STATUS "libdrm-dev found as ${libdrm}")
+    endif ()
+
+    target_link_libraries (
+        ${PROJECT_NAME}
+        drm
+    )
 endif ()
 
 #################################################################################
@@ -501,7 +535,7 @@ endif ()
 
 set (API_HEADER_LOCATION "${BS_DIR_INC}/common/instrumentation/api/metrics_discovery_api.h")
 
-if ("${PLATFORM}" STREQUAL Windows) # windows
+if (${PLATFORM} STREQUAL Windows) # windows
     install (TARGETS ${PROJECT_NAME} RUNTIME
         DESTINATION Release/bin
         CONFIGURATIONS Release
@@ -532,7 +566,7 @@ if ("${PLATFORM}" STREQUAL Windows) # windows
         CONFIGURATIONS Debug
     )
 elseif (${PLATFORM} STREQUAL linux) # linux
-    include(GNUInstallDirs)
+    include (GNUInstallDirs)
 
     if (${TARGET_ARCH} STREQUAL 64)
         set (CPACK_PACKAGE_ARCHITECTURE        "x86_64")
@@ -640,19 +674,17 @@ endif ()
 #################################################################################
 # DEBUG
 #################################################################################
-if ("${PLATFORM}" STREQUAL Windows)
+if (${PLATFORM} STREQUAL Windows) # windows
     instr_debug (${PROJECT_NAME})
-elseif ("${PLATFORM}" STREQUAL linux)
+elseif (${PLATFORM} STREQUAL linux) # linux
     message ("INFO: PROJECT_NAME           = ${PROJECT_NAME}")
     message ("INFO: VERSION                = ${MD_VERSION}")
     message ("INFO: BUILD_TYPE             = ${BUILD_TYPE}")
     message ("INFO: PLATFORM               = ${PLATFORM}")
     message ("INFO: HOST_ARCH              = ${HOST_ARCH}")
     message ("INFO: TARGET_ARCH            = ${TARGET_ARCH}")
-    message ("INFO: LINUX_DISTRO           = ${LINUX_DISTRO}")
     message ("INFO: DUMP_DIR               = ${DUMP_DIR}")
     message ("INFO: LIB_INSTALL_DIR        = ${CMAKE_INSTALL_FULL_LIBDIR}")
-    message ("INFO: LIBDRM_SRC             = ${LIBDRM_SRC}")
     message ("INFO: DRM_LIB_PATH           = ${DRM_LIB_PATH}")
     message ("INFO: BS_DIR_INSTRUMENTATION = ${BS_DIR_INSTRUMENTATION}")
     message ("INFO: BS_DIR_INC             = ${BS_DIR_INC}")

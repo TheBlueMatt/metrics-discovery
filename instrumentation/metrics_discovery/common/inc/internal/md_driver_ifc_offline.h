@@ -33,11 +33,11 @@ namespace MetricsDiscoveryInternal
         CAdapterHandleOffline() {};
         virtual ~CAdapterHandleOffline() {};
 
-        virtual TCompletionCode Close( const uint32_t adapterId )
+        virtual TCompletionCode Close( [[maybe_unused]] const uint32_t adapterId ) final
         {
             return CC_ERROR_NOT_SUPPORTED;
         };
-        virtual bool IsValid() const
+        virtual bool IsValid() const final
         {
             return true;
         };
@@ -63,142 +63,142 @@ namespace MetricsDiscoveryInternal
         CDriverInterfaceOffline& operator=( const CDriverInterfaceOffline& ) = delete; // Delete assignment operator
 
         // General:
-        virtual TCompletionCode ForceSupportDisable()
+        virtual TCompletionCode ForceSupportDisable() final
         {
             return CC_ERROR_NOT_SUPPORTED;
         };
-        virtual TCompletionCode SendSupportEnableEscape( bool enable )
+        virtual TCompletionCode SendSupportEnableEscape( [[maybe_unused]] bool enable ) final
         {
             return CC_ERROR_NOT_SUPPORTED;
         };
-        virtual TCompletionCode SendDeviceInfoParamEscape( GTDI_DEVICE_PARAM param, GTDIDeviceInfoParamExtOut& out, CMetricsDevice& metricsDevice )
+        virtual TCompletionCode SendDeviceInfoParamEscape( [[maybe_unused]] GTDI_DEVICE_PARAM param, [[maybe_unused]] GTDIDeviceInfoParamExtOut& out, [[maybe_unused]] CMetricsDevice& metricsDevice ) final
         {
             return CC_ERROR_NOT_SUPPORTED;
         };
-        virtual TCompletionCode GetMaxMinOaBufferSize( const GTDI_OA_BUFFER_TYPE oaBufferType, const GTDI_DEVICE_PARAM param, GTDIDeviceInfoParamExtOut& out, CMetricsDevice& metricsDevice )
+        virtual TCompletionCode GetMaxMinOaBufferSize( [[maybe_unused]] const GTDI_OA_BUFFER_TYPE oaBufferType, [[maybe_unused]] const GTDI_DEVICE_PARAM param, [[maybe_unused]] GTDIDeviceInfoParamExtOut& out, [[maybe_unused]] CMetricsDevice& metricsDevice ) final
         {
             return CC_ERROR_NOT_SUPPORTED;
         };
-        virtual TCompletionCode SendPmRegsConfig( TRegister** regVector, const uint32_t regCount, const uint32_t subDeviceIndex, const GTDI_OA_BUFFER_TYPE oaBufferType )
+        virtual TCompletionCode SendPmRegsConfig( [[maybe_unused]] std::vector<TRegister*>& pmRegs, [[maybe_unused]] const uint32_t subDeviceIndex, [[maybe_unused]] const GTDI_OA_BUFFER_TYPE oaBufferType, [[maybe_unused]] const TReportType reportType ) final
         {
             return CC_ERROR_NOT_SUPPORTED;
         };
-        virtual TCompletionCode SendReadRegsConfig( TRegister** regVector, uint32_t regCount )
+        virtual TCompletionCode SendReadRegsConfig( [[maybe_unused]] TRegister** regVector, [[maybe_unused]] uint32_t regCount ) final
         {
             return CC_ERROR_NOT_SUPPORTED;
         };
-        virtual TCompletionCode GetPmRegsConfigHandles( uint32_t* oaConfigHandle, uint32_t* rrConfigHandle )
+        virtual TCompletionCode GetPmRegsConfigHandles( [[maybe_unused]] uint32_t* oaConfigHandle, [[maybe_unused]] uint32_t* rrConfigHandle ) final
         {
             return CC_ERROR_NOT_SUPPORTED;
         };
-        virtual TCompletionCode ValidatePmRegsConfig( TRegister* regVector, uint32_t regCount, uint32_t platformId )
+        virtual TCompletionCode ValidatePmRegsConfig( [[maybe_unused]] TRegister* regVector, [[maybe_unused]] uint32_t regCount, [[maybe_unused]] uint32_t platformId ) final
         {
             return CC_ERROR_NOT_SUPPORTED;
         };
-        virtual TCompletionCode GetGpuCpuTimestamps( CMetricsDevice& device, uint64_t& gpuTimestamp, uint64_t& cpuTimestamp, uint32_t& cpuId, uint64_t& correlationIndicator )
+        virtual TCompletionCode GetGpuCpuTimestamps( [[maybe_unused]] CMetricsDevice& device, [[maybe_unused]] uint64_t& gpuTimestamp, [[maybe_unused]] uint64_t& cpuTimestamp, [[maybe_unused]] uint32_t& cpuId, [[maybe_unused]] uint64_t& correlationIndicator ) final
         {
             return CC_ERROR_NOT_SUPPORTED;
         };
-        virtual TCompletionCode SendGetCtxIdTagsEscape( TGetCtxTagsIdParams* params )
+        virtual TCompletionCode SendGetCtxIdTagsEscape( [[maybe_unused]] TGetCtxTagsIdParams* params ) final
         {
             return CC_ERROR_NOT_SUPPORTED;
         };
-        virtual bool IsOaBufferSupported( const GTDI_OA_BUFFER_TYPE oaBufferType, CMetricsDevice& metricsDevice )
+        virtual bool IsOaBufferSupported( [[maybe_unused]] const GTDI_OA_BUFFER_TYPE oaBufferType, [[maybe_unused]] CMetricsDevice& metricsDevice ) final
         {
             return false;
         };
-        virtual uint32_t GetAdapterId()
+        virtual uint32_t GetAdapterId() final
         {
             return m_adapterId;
         };
 
         // Synchronization:
-        virtual TCompletionCode LockConcurrentGroup( const char* name, void** semaphore )
+        virtual TCompletionCode LockConcurrentGroup( [[maybe_unused]] const char* name, [[maybe_unused]] void** semaphore ) final
         {
             return CC_ERROR_NOT_SUPPORTED;
         };
-        virtual TCompletionCode UnlockConcurrentGroup( const char* name, void** semaphore )
+        virtual TCompletionCode UnlockConcurrentGroup( [[maybe_unused]] const char* name, [[maybe_unused]] void** semaphore ) final
         {
             return CC_ERROR_NOT_SUPPORTED;
         };
 
         // Stream:
-        virtual TCompletionCode OpenIoStream( COAConcurrentGroup& oaConcurrentGroup, const uint32_t processId, uint32_t& nsTimerPeriod, uint32_t& bufferSize )
+        virtual TCompletionCode OpenIoStream( [[maybe_unused]] COAConcurrentGroup& oaConcurrentGroup, [[maybe_unused]] const uint32_t processId, [[maybe_unused]] uint32_t& nsTimerPeriod, [[maybe_unused]] uint32_t& bufferSize ) final
         {
             return CC_ERROR_NOT_SUPPORTED;
         };
-        virtual TCompletionCode ReadIoStream( COAConcurrentGroup& oaConcurrentGroup, char* reportData, uint32_t& reportsCount, uint32_t& frequency, GTDIReadCounterStreamExceptions& exceptions )
+        virtual TCompletionCode ReadIoStream( [[maybe_unused]] COAConcurrentGroup& oaConcurrentGroup, [[maybe_unused]] char* reportData, [[maybe_unused]] uint32_t& reportsCount, [[maybe_unused]] uint32_t& frequency, [[maybe_unused]] GTDIReadCounterStreamExceptions& exceptions ) final
         {
             return CC_ERROR_NOT_SUPPORTED;
         };
-        virtual TCompletionCode CloseIoStream( COAConcurrentGroup& oaConcurrentGroup )
+        virtual TCompletionCode CloseIoStream( [[maybe_unused]] COAConcurrentGroup& oaConcurrentGroup ) final
         {
             return CC_ERROR_NOT_SUPPORTED;
         };
-        virtual TCompletionCode HandleIoStreamExceptions( COAConcurrentGroup& oaConcurrentGroup, const uint32_t processId, uint32_t& reportCount, const GTDIReadCounterStreamExceptions exceptions )
+        virtual TCompletionCode HandleIoStreamExceptions( [[maybe_unused]] COAConcurrentGroup& oaConcurrentGroup, [[maybe_unused]] const uint32_t processId, [[maybe_unused]] uint32_t& reportCount, [[maybe_unused]] const GTDIReadCounterStreamExceptions exceptions ) final
         {
             return CC_ERROR_NOT_SUPPORTED;
         };
-        virtual TCompletionCode WaitForIoStreamReports( COAConcurrentGroup& oaConcurrentGroup, const uint32_t milliseconds )
+        virtual TCompletionCode WaitForIoStreamReports( [[maybe_unused]] COAConcurrentGroup& oaConcurrentGroup, [[maybe_unused]] const uint32_t milliseconds ) final
         {
             return CC_ERROR_NOT_SUPPORTED;
         };
-        virtual bool IsIoMeasurementInfoAvailable( const TIoMeasurementInfoType ioMeasurementInfoType )
+        virtual bool IsIoMeasurementInfoAvailable( [[maybe_unused]] const TIoMeasurementInfoType ioMeasurementInfoType ) final
         {
             return false;
         };
-        virtual bool IsStreamTypeSupported( const TStreamType streamType )
+        virtual bool IsStreamTypeSupported( [[maybe_unused]] const TStreamType streamType ) final
         {
             return false;
         };
 
         // Overrides:
-        virtual TCompletionCode SetFrequencyOverride( CMetricsDevice& device, const TSetFrequencyOverrideParams_1_2& params )
+        virtual TCompletionCode SetFrequencyOverride( [[maybe_unused]] CMetricsDevice& device, [[maybe_unused]] const TSetFrequencyOverrideParams_1_2& params ) final
         {
             return CC_ERROR_NOT_SUPPORTED;
         };
-        virtual TCompletionCode SetQueryOverride( TOverrideType overrideType, uint32_t oaBufferSize, const TSetQueryOverrideParams_1_2& params )
+        virtual TCompletionCode SetQueryOverride( [[maybe_unused]] TOverrideType overrideType, [[maybe_unused]] uint32_t oaBufferSize, [[maybe_unused]] const TSetQueryOverrideParams_1_2& params ) final
         {
             return CC_ERROR_NOT_SUPPORTED;
         };
-        virtual TCompletionCode SetFreqChangeReportsOverride( bool enable )
+        virtual TCompletionCode SetFreqChangeReportsOverride( [[maybe_unused]] bool enable ) final
         {
             return CC_ERROR_NOT_SUPPORTED;
         };
-        virtual bool IsOverrideAvailable( TOverrideType overrideType )
+        virtual bool IsOverrideAvailable( [[maybe_unused]] TOverrideType overrideType ) final
         {
             return false;
         };
-        virtual bool IsSubDeviceSupported()
+        virtual bool IsSubDeviceSupported() final
         {
             return false;
         };
-        virtual TCompletionCode SetQueryModeOverride( const TQueryMode queryMode )
+        virtual TCompletionCode SetQueryModeOverride( [[maybe_unused]] const TQueryMode queryMode ) final
         {
             return CC_ERROR_NOT_SUPPORTED;
         };
-        virtual TQueryMode GetQueryModeOverride()
+        virtual TQueryMode GetQueryModeOverride() final
         {
             return QUERY_MODE_NONE;
         };
 
         // Adapter enumeration static:
-        static bool IsSupportedIntelAdapter( CDriverInterfaceOffline& adapterHandle, uint32_t& platformId )
+        static bool IsSupportedIntelAdapter( [[maybe_unused]] CDriverInterfaceOffline& adapterHandle, [[maybe_unused]] uint32_t& platformId )
         {
             return false;
         };
-        static TCompletionCode FillAdapterData( CDriverInterfaceOffline& adapterHandle, TAdapterData& adapterData )
+        static TCompletionCode FillAdapterData( [[maybe_unused]] CDriverInterfaceOffline& adapterHandle, [[maybe_unused]] TAdapterData& adapterData )
         {
             return CC_ERROR_NOT_SUPPORTED;
         };
 
     protected:
-        virtual bool CreateContext()
+        virtual bool CreateContext() final
         {
             return false;
         };
-        virtual void            DeleteContext() {};
-        virtual TCompletionCode ReopenIoStream( const std::wstring& streamEventNameW, const GTDI_OA_BUFFER_TYPE oaBufferType, const uint32_t processId )
+        virtual void            DeleteContext() final {};
+        virtual TCompletionCode ReopenIoStream( [[maybe_unused]] const std::wstring& streamEventNameW, [[maybe_unused]] const GTDI_OA_BUFFER_TYPE oaBufferType, [[maybe_unused]] const uint32_t processId ) final
         {
             return CC_ERROR_NOT_SUPPORTED;
         };

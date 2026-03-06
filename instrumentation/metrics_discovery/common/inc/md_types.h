@@ -13,6 +13,7 @@ SPDX-License-Identifier: MIT
 #pragma once
 
 #include "metrics_discovery_internal_api.h"
+#include "instr_gt_driver_ifc.h"
 
 // Defines
 #define MD_MAX_CONTEXT_TAGS              128 // Should match max count used by Intel driver

@@ -166,39 +166,37 @@ namespace MetricsDiscoveryInternal
     //     COAConcurrentGroup
     //
     // Method:
-    //     RemoveMetricSet
+    //     RemoveMetricSetInternal
     //
     // Description:
     //     Removes a given metric set from the concurrent group.
     //
     // Input:
-    //     IMetricSet_1_13* metricSet - metric set object to delete.
+    //     CMetricSet* metricSet - metric set object to delete.
     //
     // Output:
-    //     TCompletionCode            - result of the operation.
+    //     TCompletionCode       - result of the operation.
     //
     //////////////////////////////////////////////////////////////////////////////
-    TCompletionCode COAConcurrentGroup::RemoveMetricSet( IMetricSet_1_13* metricSet )
+    TCompletionCode COAConcurrentGroup::RemoveMetricSetInternal( CMetricSet* metricSet )
     {
         const uint32_t adapterId = m_device.GetAdapter().GetAdapterId();
 
         MD_CHECK_PTR_RET_A( adapterId, metricSet, CC_ERROR_INVALID_PARAMETER );
 
-        CMetricSet* metricSetInternal = static_cast<CMetricSet*>( metricSet );
-
-        if( !metricSetInternal->IsFlexible() )
+        if( !metricSet->IsFlexible() )
         {
             MD_LOG_A( adapterId, LOG_DEBUG, "Metric set is not flexible" );
             return CC_ERROR_INVALID_PARAMETER;
         }
 
-        if( metricSetInternal->IsOpened() )
+        if( metricSet->IsOpened() )
         {
             MD_LOG_A( adapterId, LOG_DEBUG, "Metric set is still opened" );
             return CC_ERROR_INVALID_PARAMETER;
         }
 
-        auto metricSetIterator = std::find( m_setsVector.begin(), m_setsVector.end(), metricSetInternal );
+        auto metricSetIterator = std::find( m_setsVector.begin(), m_setsVector.end(), metricSet );
 
         if( metricSetIterator == m_setsVector.end() )
         {
@@ -222,16 +220,39 @@ namespace MetricsDiscoveryInternal
     //     COAConcurrentGroup
     //
     // Method:
+    //     RemoveMetricSet
+    //
+    // Description:
+    //     Removes a given metric set from the concurrent group.
+    //
+    // Input:
+    //     IMetricSet_1_13* metricSet - metric set object to delete.
+    //
+    // Output:
+    //     TCompletionCode            - result of the operation.
+    //
+    //////////////////////////////////////////////////////////////////////////////
+    TCompletionCode COAConcurrentGroup::RemoveMetricSet( IMetricSet_1_13* metricSet )
+    {
+        return RemoveMetricSetInternal( static_cast<CMetricSet*>( metricSet ) );
+    }
+
+    //////////////////////////////////////////////////////////////////////////////
+    //
+    // Class:
+    //     COAConcurrentGroup
+    //
+    // Method:
     //     SetIoStreamSamplingType
     //
     // Description:
     //     Sets stream sampling type.
     //
     // Input:
-    //     TSamplingType type - requested IO Stream Sampling Type
+    //     TSamplingType   type - requested IO Stream Sampling Type
     //
     // Output:
-    //     TCompletionCode - result of operation (*CC_OK* is ok)
+    //     TCompletionCode      - result of operation (*CC_OK* is ok)
     //
     //////////////////////////////////////////////////////////////////////////////
     TCompletionCode COAConcurrentGroup::SetIoStreamSamplingType( TSamplingType samplingType )
@@ -371,7 +392,7 @@ namespace MetricsDiscoveryInternal
     //     TCompletionCode - result of operation (*CC_OK* or *CC_READ_PENDING* is ok)
     //
     //////////////////////////////////////////////////////////////////////////////
-    TCompletionCode COAConcurrentGroup::ReadIoStream( uint32_t* reportCount, char* reportData, uint32_t readFlags )
+    TCompletionCode COAConcurrentGroup::ReadIoStream( uint32_t* reportCount, char* reportData, [[maybe_unused]] uint32_t readFlags )
     {
         const uint32_t adapterId = m_device.GetAdapter().GetAdapterId();
 
@@ -467,10 +488,10 @@ namespace MetricsDiscoveryInternal
     //     Returns *CC_OK* if wait was successful (data waiting in the buffer was signaled).
     //
     // Input:
-    //     uint32_t     milliseconds   - number of milliseconds to wait
+    //     uint32_t        milliseconds - number of milliseconds to wait
     //
     // Output:
-    //     TCompletionCode             - result of the operation
+    //     TCompletionCode              - result of the operation
     //
     //////////////////////////////////////////////////////////////////////////////
     TCompletionCode COAConcurrentGroup::WaitForReports( uint32_t milliseconds )
@@ -493,10 +514,10 @@ namespace MetricsDiscoveryInternal
     //     are set after successful ReadIoStream.
     //
     // Input:
-    //     uint32_t     index  - index of the measurement information
+    //     uint32_t          index - index of the measurement information
     //
     // Output:
-    //     IInformation_1_0*   - measurement information, nullptr if count is 0
+    //     IInformation_1_0*       - measurement information, nullptr if count is 0
     //
     //////////////////////////////////////////////////////////////////////////////
     IInformation_1_0* COAConcurrentGroup::GetIoMeasurementInformation( uint32_t index )
@@ -519,10 +540,10 @@ namespace MetricsDiscoveryInternal
     //     are set after successful ReadIoStream if IO_READ_FLAG_GET_CONTEXT_ID_TAGS was set.
     //
     // Input:
-    //     uint32_t     index  - index of the GPU context information
+    //     uint32_t          index - index of the GPU context information
     //
     // Output:
-    //     IInformation_1_0*   - GPU context information, nullptr if count is 0
+    //     IInformation_1_0*       - GPU context information, nullptr if count is 0
     //
     //////////////////////////////////////////////////////////////////////////////
     IInformation_1_0* COAConcurrentGroup::GetIoGpuContextInformation( uint32_t index )
@@ -1045,48 +1066,6 @@ namespace MetricsDiscoveryInternal
     //     COAConcurrentGroup
     //
     // Method:
-    //     AddIoGpuContextInformation
-    //
-    // Description:
-    //     Adds new GPU context information to the *m_ioGpuContextInfoVector*. The value will be stored
-    //     as a SnapshotReportReadEquation.
-    //
-    // Input:
-    //     const char*         name                -
-    //     const char*         shortName           -
-    //     const char*         longName            -
-    //     const char*         group               -
-    //     TInformationType    informationType     -
-    //     const char*         informationUnits    -
-    //
-    // Output:
-    //     CInformation*   - pointer to the newly added GPU context information. nullptr if error.
-    //
-    //////////////////////////////////////////////////////////////////////////////
-    CInformation* COAConcurrentGroup::AddIoGpuContextInformation( const char* name, const char* shortName, const char* longName, const char* group, TInformationType informationType, const char* informationUnits )
-    {
-        const uint32_t adapterId      = m_device.GetAdapter().GetAdapterId();
-        CInformation*  gpuContextInfo = new( std::nothrow ) CInformation( m_device, static_cast<uint32_t>( m_ioGpuContextInfoVector.size() ), name, shortName, longName, group, API_TYPE_IOSTREAM | 0x0, informationType, informationUnits );
-
-        MD_CHECK_PTR_RET_A( adapterId, gpuContextInfo, nullptr );
-
-        MD_CHECK_CC( gpuContextInfo->SetSnapshotReportReadEquation( "" ) );
-        MD_CHECK_CC( gpuContextInfo->SetDeltaReportReadEquation( "" ) );
-
-        m_ioGpuContextInfoVector.push_back( gpuContextInfo );
-        return gpuContextInfo;
-
-    exception:
-        MD_SAFE_DELETE( gpuContextInfo );
-        return nullptr;
-    }
-
-    //////////////////////////////////////////////////////////////////////////////
-    //
-    // Class:
-    //     COAConcurrentGroup
-    //
-    // Method:
     //     SetIoMeasurementInfoPredefined
     //
     // Description:
@@ -1135,13 +1114,23 @@ namespace MetricsDiscoveryInternal
     //////////////////////////////////////////////////////////////////////////////
     TCompletionCode COAConcurrentGroup::GetStreamTypeFromSamplingType( const TSamplingType samplingType, TStreamType& streamType ) const
     {
-        if( samplingType == SAMPLING_TYPE_OA_TIMER )
+        switch( samplingType )
         {
-            streamType = STREAM_TYPE_OA;
-            return CC_OK;
-        }
+            case SAMPLING_TYPE_OA_TIMER:
+                streamType = STREAM_TYPE_OA;
+                return CC_OK;
 
-        return CC_ERROR_NOT_SUPPORTED;
+            case SAMPLING_TYPE_OAM_TIMER:
+                streamType = STREAM_TYPE_OAM;
+                return CC_OK;
+
+            case SAMPLING_TYPE_OAMERT_TIMER:
+                streamType = STREAM_TYPE_OAMERT;
+                return CC_OK;
+
+            default:
+                return CC_ERROR_NOT_SUPPORTED;
+        }
     }
 
     //////////////////////////////////////////////////////////////////////////////

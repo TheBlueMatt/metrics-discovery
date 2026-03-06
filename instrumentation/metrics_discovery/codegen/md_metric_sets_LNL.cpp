@@ -11,6 +11,7 @@ SPDX-License-Identifier: MIT
 //     Abstract:   C++ automated generated file that defines Metric Sets
 //                 for each Concurrent Group
 
+#include "md_per_platform_preamble.h"
 #include "md_concurrent_group.h"
 #include "md_metric_set.h"
 #include "md_metric_sets_LNL.h"
@@ -136,7 +137,7 @@ namespace MetricsDiscoveryInternal::MetricSets_LNL_OA
 
         information = concurrentGroup->AddInformation( "QueryBeginTime", "Query Begin Time", "The measurement begin time.", "Report Meta Data", API_TYPE_DX9 | API_TYPE_DX10 | API_TYPE_DX11 | API_TYPE_DX12 | API_TYPE_VULKAN | API_TYPE_OGL | API_TYPE_OGL4_X | API_TYPE_OCL | API_TYPE_IOSTREAM, INFORMATION_TYPE_TIMESTAMP, "ns", nullptr, 0 );
         MD_CHECK_PTR( information );
-        MD_CHECK_CC( information->SetSnapshotReportReadEquation( "qw@0x08 100 UMUL $GpuTimestampFrequency 100000 UDIV UDIV 100 UMUL" ) );
+        MD_CHECK_CC( information->SetSnapshotReportReadEquation( "qw@0x08 625 UMUL $GpuTimestampFrequency 1600000 UDIV UDIV" ) );
         MD_CHECK_CC( information->SetDeltaReportReadEquation( "qw@0x290" ) );
         MD_CHECK_CC( information->SetOverflowFunction( "NS_TIME" ) );
 
@@ -267,7 +268,7 @@ namespace MetricsDiscoveryInternal::MetricSets_LNL_OA
             "GPU", ( METRIC_GROUP_NAME_ID_GPU * 0x1000000 ), USAGE_FLAG_TIER_1 | USAGE_FLAG_OVERVIEW | USAGE_FLAG_SYSTEM | USAGE_FLAG_FRAME | USAGE_FLAG_BATCH | USAGE_FLAG_DRAW, API_TYPE_DX9 | API_TYPE_DX10 | API_TYPE_DX11 | API_TYPE_DX12 | API_TYPE_VULKAN | API_TYPE_OGL | API_TYPE_OGL4_X | API_TYPE_OCL | API_TYPE_IOSTREAM,
             METRIC_TYPE_EVENT, RESULT_UINT64, "ns", 0, 0, HW_UNIT_GPU, nullptr, nullptr, nullptr, 0 );
         MD_CHECK_PTR( metric );
-        MD_CHECK_CC( metric->SetSnapshotReportReadEquation( "qw@0x08 100 UMUL $GpuTimestampFrequency 100000 UDIV UDIV 100 UMUL" ) );
+        MD_CHECK_CC( metric->SetSnapshotReportReadEquation( "qw@0x08 10000 UMUL $GpuTimestampFrequency 100000 UDIV UDIV" ) );
         MD_CHECK_CC( metric->SetDeltaReportReadEquation( "qw@0" ) );
         MD_CHECK_CC( metric->SetSnapshotReportDeltaFunction( "NS_TIME" ) );
         metric->SetQueryModeMask( QUERY_MODE_MASK_RENDER | QUERY_MODE_MASK_COMPUTE | QUERY_MODE_MASK_GLOBAL | QUERY_MODE_MASK_GLOBAL_EXTENDED );
@@ -1171,6 +1172,8 @@ namespace MetricsDiscoveryInternal::MetricSets_LNL_OA
         MD_CHECK_CC( AddStartConfigRegister( 0xe558, 0x00010050, REGISTER_TYPE_FLEX ) );
         MD_CHECK_CC( AddStartConfigRegister( 0xe658, 0x00050060, REGISTER_TYPE_FLEX ) );
         MD_CHECK_CC( AddStartConfigRegister( 0xe758, 0x00000010, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe45c, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe55c, 0x00000000, REGISTER_TYPE_FLEX ) );
         MD_CHECK_CC( AddStartConfigRegister( 0xe65c, 0x00000000, REGISTER_TYPE_FLEX ) );
         MD_CHECK_CC( RefreshConfigRegisters() );
 
@@ -1196,7 +1199,7 @@ namespace MetricsDiscoveryInternal::MetricSets_LNL_OA
             "GPU", ( METRIC_GROUP_NAME_ID_GPU * 0x1000000 ), USAGE_FLAG_TIER_1 | USAGE_FLAG_OVERVIEW | USAGE_FLAG_SYSTEM | USAGE_FLAG_FRAME | USAGE_FLAG_BATCH | USAGE_FLAG_DRAW, API_TYPE_DX9 | API_TYPE_DX10 | API_TYPE_DX11 | API_TYPE_DX12 | API_TYPE_VULKAN | API_TYPE_OGL | API_TYPE_OGL4_X | API_TYPE_OCL | API_TYPE_IOSTREAM,
             METRIC_TYPE_EVENT, RESULT_UINT64, "ns", 0, 0, HW_UNIT_GPU, nullptr, nullptr, nullptr, 0 );
         MD_CHECK_PTR( metric );
-        MD_CHECK_CC( metric->SetSnapshotReportReadEquation( "qw@0x08 100 UMUL $GpuTimestampFrequency 100000 UDIV UDIV 100 UMUL" ) );
+        MD_CHECK_CC( metric->SetSnapshotReportReadEquation( "qw@0x08 10000 UMUL $GpuTimestampFrequency 100000 UDIV UDIV" ) );
         MD_CHECK_CC( metric->SetDeltaReportReadEquation( "qw@0" ) );
         MD_CHECK_CC( metric->SetSnapshotReportDeltaFunction( "NS_TIME" ) );
         metric->SetQueryModeMask( QUERY_MODE_MASK_RENDER | QUERY_MODE_MASK_COMPUTE | QUERY_MODE_MASK_GLOBAL | QUERY_MODE_MASK_GLOBAL_EXTENDED );
@@ -1977,6 +1980,12 @@ namespace MetricsDiscoveryInternal::MetricSets_LNL_OA
         MD_CHECK_CC( AddStartConfigRegister( 0x137b0, 0x00005012, REGISTER_TYPE_OA ) );
         MD_CHECK_CC( AddStartConfigRegister( 0x137b4, 0x00000000, REGISTER_TYPE_OA ) );
         MD_CHECK_CC( AddStartConfigRegister( 0xe458, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe558, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe658, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe758, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe45c, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe55c, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe65c, 0x00000000, REGISTER_TYPE_FLEX ) );
         MD_CHECK_CC( RefreshConfigRegisters() );
 
         return CC_OK;
@@ -2001,7 +2010,7 @@ namespace MetricsDiscoveryInternal::MetricSets_LNL_OA
             "GPU", ( METRIC_GROUP_NAME_ID_GPU * 0x1000000 ), USAGE_FLAG_TIER_1 | USAGE_FLAG_OVERVIEW | USAGE_FLAG_SYSTEM | USAGE_FLAG_FRAME | USAGE_FLAG_BATCH | USAGE_FLAG_DRAW, API_TYPE_DX9 | API_TYPE_DX10 | API_TYPE_DX11 | API_TYPE_DX12 | API_TYPE_VULKAN | API_TYPE_OGL | API_TYPE_OGL4_X | API_TYPE_OCL | API_TYPE_IOSTREAM,
             METRIC_TYPE_EVENT, RESULT_UINT64, "ns", 0, 0, HW_UNIT_GPU, nullptr, nullptr, nullptr, 0 );
         MD_CHECK_PTR( metric );
-        MD_CHECK_CC( metric->SetSnapshotReportReadEquation( "qw@0x08 100 UMUL $GpuTimestampFrequency 100000 UDIV UDIV 100 UMUL" ) );
+        MD_CHECK_CC( metric->SetSnapshotReportReadEquation( "qw@0x08 10000 UMUL $GpuTimestampFrequency 100000 UDIV UDIV" ) );
         MD_CHECK_CC( metric->SetDeltaReportReadEquation( "qw@0" ) );
         MD_CHECK_CC( metric->SetSnapshotReportDeltaFunction( "NS_TIME" ) );
         metric->SetQueryModeMask( QUERY_MODE_MASK_RENDER | QUERY_MODE_MASK_COMPUTE | QUERY_MODE_MASK_GLOBAL | QUERY_MODE_MASK_GLOBAL_EXTENDED );
@@ -2413,6 +2422,13 @@ namespace MetricsDiscoveryInternal::MetricSets_LNL_OA
         MD_CHECK_CC( AddStartConfigRegister( 0x135ac, 0x00000000, REGISTER_TYPE_OA ) );
         MD_CHECK_CC( AddStartConfigRegister( 0x137a8, 0x00005e05, REGISTER_TYPE_OA ) );
         MD_CHECK_CC( AddStartConfigRegister( 0x137ac, 0x00000000, REGISTER_TYPE_OA ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe458, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe558, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe658, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe758, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe45c, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe55c, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe65c, 0x00000000, REGISTER_TYPE_FLEX ) );
         MD_CHECK_CC( RefreshConfigRegisters() );
 
         return CC_OK;
@@ -2437,7 +2453,7 @@ namespace MetricsDiscoveryInternal::MetricSets_LNL_OA
             "GPU", ( METRIC_GROUP_NAME_ID_GPU * 0x1000000 ), USAGE_FLAG_TIER_1 | USAGE_FLAG_OVERVIEW | USAGE_FLAG_SYSTEM | USAGE_FLAG_FRAME | USAGE_FLAG_BATCH | USAGE_FLAG_DRAW, API_TYPE_DX9 | API_TYPE_DX10 | API_TYPE_DX11 | API_TYPE_DX12 | API_TYPE_VULKAN | API_TYPE_OGL | API_TYPE_OGL4_X | API_TYPE_OCL | API_TYPE_IOSTREAM,
             METRIC_TYPE_EVENT, RESULT_UINT64, "ns", 0, 0, HW_UNIT_GPU, nullptr, nullptr, nullptr, 0 );
         MD_CHECK_PTR( metric );
-        MD_CHECK_CC( metric->SetSnapshotReportReadEquation( "qw@0x08 100 UMUL $GpuTimestampFrequency 100000 UDIV UDIV 100 UMUL" ) );
+        MD_CHECK_CC( metric->SetSnapshotReportReadEquation( "qw@0x08 10000 UMUL $GpuTimestampFrequency 100000 UDIV UDIV" ) );
         MD_CHECK_CC( metric->SetDeltaReportReadEquation( "qw@0" ) );
         MD_CHECK_CC( metric->SetSnapshotReportDeltaFunction( "NS_TIME" ) );
         metric->SetQueryModeMask( QUERY_MODE_MASK_RENDER | QUERY_MODE_MASK_COMPUTE | QUERY_MODE_MASK_GLOBAL | QUERY_MODE_MASK_GLOBAL_EXTENDED );
@@ -2994,6 +3010,13 @@ namespace MetricsDiscoveryInternal::MetricSets_LNL_OA
         MD_CHECK_CC( AddStartConfigRegister( 0x135f4, 0x00000000, REGISTER_TYPE_OA ) );
         MD_CHECK_CC( AddStartConfigRegister( 0x137f0, 0x00005e03, REGISTER_TYPE_OA ) );
         MD_CHECK_CC( AddStartConfigRegister( 0x137f4, 0x00000000, REGISTER_TYPE_OA ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe458, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe558, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe658, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe758, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe45c, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe55c, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe65c, 0x00000000, REGISTER_TYPE_FLEX ) );
         MD_CHECK_CC( RefreshConfigRegisters() );
 
         return CC_OK;
@@ -3018,7 +3041,7 @@ namespace MetricsDiscoveryInternal::MetricSets_LNL_OA
             "GPU", ( METRIC_GROUP_NAME_ID_GPU * 0x1000000 ), USAGE_FLAG_TIER_1 | USAGE_FLAG_OVERVIEW | USAGE_FLAG_SYSTEM | USAGE_FLAG_FRAME | USAGE_FLAG_BATCH | USAGE_FLAG_DRAW, API_TYPE_DX9 | API_TYPE_DX10 | API_TYPE_DX11 | API_TYPE_DX12 | API_TYPE_VULKAN | API_TYPE_OGL | API_TYPE_OGL4_X | API_TYPE_OCL | API_TYPE_IOSTREAM,
             METRIC_TYPE_EVENT, RESULT_UINT64, "ns", 0, 0, HW_UNIT_GPU, nullptr, nullptr, nullptr, 0 );
         MD_CHECK_PTR( metric );
-        MD_CHECK_CC( metric->SetSnapshotReportReadEquation( "qw@0x08 100 UMUL $GpuTimestampFrequency 100000 UDIV UDIV 100 UMUL" ) );
+        MD_CHECK_CC( metric->SetSnapshotReportReadEquation( "qw@0x08 10000 UMUL $GpuTimestampFrequency 100000 UDIV UDIV" ) );
         MD_CHECK_CC( metric->SetDeltaReportReadEquation( "qw@0" ) );
         MD_CHECK_CC( metric->SetSnapshotReportDeltaFunction( "NS_TIME" ) );
         metric->SetQueryModeMask( QUERY_MODE_MASK_RENDER | QUERY_MODE_MASK_COMPUTE | QUERY_MODE_MASK_GLOBAL | QUERY_MODE_MASK_GLOBAL_EXTENDED );
@@ -3817,6 +3840,13 @@ namespace MetricsDiscoveryInternal::MetricSets_LNL_OA
         MD_CHECK_CC( AddStartConfigRegister( 0x135dc, 0x00000000, REGISTER_TYPE_OA ) );
         MD_CHECK_CC( AddStartConfigRegister( 0x137d8, 0x00006e01, REGISTER_TYPE_OA ) );
         MD_CHECK_CC( AddStartConfigRegister( 0x137dc, 0x00000000, REGISTER_TYPE_OA ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe458, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe558, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe658, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe758, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe45c, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe55c, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe65c, 0x00000000, REGISTER_TYPE_FLEX ) );
         MD_CHECK_CC( RefreshConfigRegisters() );
 
         return CC_OK;
@@ -3841,7 +3871,7 @@ namespace MetricsDiscoveryInternal::MetricSets_LNL_OA
             "GPU", ( METRIC_GROUP_NAME_ID_GPU * 0x1000000 ), USAGE_FLAG_TIER_1 | USAGE_FLAG_OVERVIEW | USAGE_FLAG_SYSTEM | USAGE_FLAG_FRAME | USAGE_FLAG_BATCH | USAGE_FLAG_DRAW, API_TYPE_DX9 | API_TYPE_DX10 | API_TYPE_DX11 | API_TYPE_DX12 | API_TYPE_VULKAN | API_TYPE_OGL | API_TYPE_OGL4_X | API_TYPE_OCL | API_TYPE_IOSTREAM,
             METRIC_TYPE_EVENT, RESULT_UINT64, "ns", 0, 0, HW_UNIT_GPU, nullptr, nullptr, nullptr, 0 );
         MD_CHECK_PTR( metric );
-        MD_CHECK_CC( metric->SetSnapshotReportReadEquation( "qw@0x08 100 UMUL $GpuTimestampFrequency 100000 UDIV UDIV 100 UMUL" ) );
+        MD_CHECK_CC( metric->SetSnapshotReportReadEquation( "qw@0x08 10000 UMUL $GpuTimestampFrequency 100000 UDIV UDIV" ) );
         MD_CHECK_CC( metric->SetDeltaReportReadEquation( "qw@0" ) );
         MD_CHECK_CC( metric->SetSnapshotReportDeltaFunction( "NS_TIME" ) );
         metric->SetQueryModeMask( QUERY_MODE_MASK_RENDER | QUERY_MODE_MASK_COMPUTE | QUERY_MODE_MASK_GLOBAL | QUERY_MODE_MASK_GLOBAL_EXTENDED );
@@ -4522,6 +4552,13 @@ namespace MetricsDiscoveryInternal::MetricSets_LNL_OA
         MD_CHECK_CC( AddStartConfigRegister( 0x135cc, 0x00000000, REGISTER_TYPE_OA ) );
         MD_CHECK_CC( AddStartConfigRegister( 0x137c8, 0x00004e02, REGISTER_TYPE_OA ) );
         MD_CHECK_CC( AddStartConfigRegister( 0x137cc, 0x00000000, REGISTER_TYPE_OA ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe458, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe558, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe658, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe758, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe45c, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe55c, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe65c, 0x00000000, REGISTER_TYPE_FLEX ) );
         MD_CHECK_CC( RefreshConfigRegisters() );
 
         return CC_OK;
@@ -4546,7 +4583,7 @@ namespace MetricsDiscoveryInternal::MetricSets_LNL_OA
             "GPU", ( METRIC_GROUP_NAME_ID_GPU * 0x1000000 ), USAGE_FLAG_TIER_1 | USAGE_FLAG_OVERVIEW | USAGE_FLAG_SYSTEM | USAGE_FLAG_FRAME | USAGE_FLAG_BATCH | USAGE_FLAG_DRAW, API_TYPE_DX9 | API_TYPE_DX10 | API_TYPE_DX11 | API_TYPE_DX12 | API_TYPE_VULKAN | API_TYPE_OGL | API_TYPE_OGL4_X | API_TYPE_OCL | API_TYPE_IOSTREAM,
             METRIC_TYPE_EVENT, RESULT_UINT64, "ns", 0, 0, HW_UNIT_GPU, nullptr, nullptr, nullptr, 0 );
         MD_CHECK_PTR( metric );
-        MD_CHECK_CC( metric->SetSnapshotReportReadEquation( "qw@0x08 100 UMUL $GpuTimestampFrequency 100000 UDIV UDIV 100 UMUL" ) );
+        MD_CHECK_CC( metric->SetSnapshotReportReadEquation( "qw@0x08 10000 UMUL $GpuTimestampFrequency 100000 UDIV UDIV" ) );
         MD_CHECK_CC( metric->SetDeltaReportReadEquation( "qw@0" ) );
         MD_CHECK_CC( metric->SetSnapshotReportDeltaFunction( "NS_TIME" ) );
         metric->SetQueryModeMask( QUERY_MODE_MASK_RENDER | QUERY_MODE_MASK_COMPUTE | QUERY_MODE_MASK_GLOBAL | QUERY_MODE_MASK_GLOBAL_EXTENDED );
@@ -5002,10 +5039,13 @@ namespace MetricsDiscoveryInternal::MetricSets_LNL_OA
         MD_CHECK_CC( AddStartConfigRegister( 0x13514, 0x00000000, REGISTER_TYPE_OA ) );
         MD_CHECK_CC( AddStartConfigRegister( 0x13710, 0x00006805, REGISTER_TYPE_OA ) );
         MD_CHECK_CC( AddStartConfigRegister( 0x13714, 0x00000000, REGISTER_TYPE_OA ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe458, 0x00000000, REGISTER_TYPE_FLEX ) );
         MD_CHECK_CC( AddStartConfigRegister( 0xe558, 0x000d00c0, REGISTER_TYPE_FLEX ) );
         MD_CHECK_CC( AddStartConfigRegister( 0xe658, 0x000c00e0, REGISTER_TYPE_FLEX ) );
         MD_CHECK_CC( AddStartConfigRegister( 0xe758, 0x000e00d0, REGISTER_TYPE_FLEX ) );
         MD_CHECK_CC( AddStartConfigRegister( 0xe45c, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe55c, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe65c, 0x00000000, REGISTER_TYPE_FLEX ) );
         MD_CHECK_CC( RefreshConfigRegisters() );
 
         return CC_OK;
@@ -5030,7 +5070,7 @@ namespace MetricsDiscoveryInternal::MetricSets_LNL_OA
             "GPU", ( METRIC_GROUP_NAME_ID_GPU * 0x1000000 ), USAGE_FLAG_TIER_1 | USAGE_FLAG_OVERVIEW | USAGE_FLAG_SYSTEM | USAGE_FLAG_FRAME | USAGE_FLAG_BATCH | USAGE_FLAG_DRAW, API_TYPE_DX9 | API_TYPE_DX10 | API_TYPE_DX11 | API_TYPE_DX12 | API_TYPE_VULKAN | API_TYPE_OGL | API_TYPE_OGL4_X | API_TYPE_OCL | API_TYPE_IOSTREAM,
             METRIC_TYPE_EVENT, RESULT_UINT64, "ns", 0, 0, HW_UNIT_GPU, nullptr, nullptr, nullptr, 0 );
         MD_CHECK_PTR( metric );
-        MD_CHECK_CC( metric->SetSnapshotReportReadEquation( "qw@0x08 100 UMUL $GpuTimestampFrequency 100000 UDIV UDIV 100 UMUL" ) );
+        MD_CHECK_CC( metric->SetSnapshotReportReadEquation( "qw@0x08 10000 UMUL $GpuTimestampFrequency 100000 UDIV UDIV" ) );
         MD_CHECK_CC( metric->SetDeltaReportReadEquation( "qw@0" ) );
         MD_CHECK_CC( metric->SetSnapshotReportDeltaFunction( "NS_TIME" ) );
         metric->SetQueryModeMask( QUERY_MODE_MASK_RENDER | QUERY_MODE_MASK_COMPUTE | QUERY_MODE_MASK_GLOBAL | QUERY_MODE_MASK_GLOBAL_EXTENDED );
@@ -5854,6 +5894,7 @@ namespace MetricsDiscoveryInternal::MetricSets_LNL_OA
         MD_CHECK_CC( AddStartConfigRegister( 0xe658, 0x00000000, REGISTER_TYPE_FLEX ) );
         MD_CHECK_CC( AddStartConfigRegister( 0xe758, 0x00000000, REGISTER_TYPE_FLEX ) );
         MD_CHECK_CC( AddStartConfigRegister( 0xe45c, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe55c, 0x00000000, REGISTER_TYPE_FLEX ) );
         MD_CHECK_CC( AddStartConfigRegister( 0xe65c, 0x00000000, REGISTER_TYPE_FLEX ) );
         MD_CHECK_CC( RefreshConfigRegisters() );
 
@@ -5879,7 +5920,7 @@ namespace MetricsDiscoveryInternal::MetricSets_LNL_OA
             "GPU", ( METRIC_GROUP_NAME_ID_GPU * 0x1000000 ), USAGE_FLAG_TIER_1 | USAGE_FLAG_OVERVIEW | USAGE_FLAG_SYSTEM | USAGE_FLAG_FRAME | USAGE_FLAG_BATCH | USAGE_FLAG_DRAW, API_TYPE_DX9 | API_TYPE_DX10 | API_TYPE_DX11 | API_TYPE_DX12 | API_TYPE_VULKAN | API_TYPE_OGL | API_TYPE_OGL4_X | API_TYPE_OCL | API_TYPE_IOSTREAM,
             METRIC_TYPE_EVENT, RESULT_UINT64, "ns", 0, 0, HW_UNIT_GPU, nullptr, nullptr, nullptr, 0 );
         MD_CHECK_PTR( metric );
-        MD_CHECK_CC( metric->SetSnapshotReportReadEquation( "qw@0x08 100 UMUL $GpuTimestampFrequency 100000 UDIV UDIV 100 UMUL" ) );
+        MD_CHECK_CC( metric->SetSnapshotReportReadEquation( "qw@0x08 10000 UMUL $GpuTimestampFrequency 100000 UDIV UDIV" ) );
         MD_CHECK_CC( metric->SetDeltaReportReadEquation( "qw@0" ) );
         MD_CHECK_CC( metric->SetSnapshotReportDeltaFunction( "NS_TIME" ) );
         metric->SetQueryModeMask( QUERY_MODE_MASK_RENDER | QUERY_MODE_MASK_COMPUTE | QUERY_MODE_MASK_GLOBAL | QUERY_MODE_MASK_GLOBAL_EXTENDED );
@@ -6297,6 +6338,11 @@ namespace MetricsDiscoveryInternal::MetricSets_LNL_OA
         MD_CHECK_CC( AddStartConfigRegister( 0x13714, 0x00000000, REGISTER_TYPE_OA ) );
         MD_CHECK_CC( AddStartConfigRegister( 0xe458, 0x00000000, REGISTER_TYPE_FLEX ) );
         MD_CHECK_CC( AddStartConfigRegister( 0xe558, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe658, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe758, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe45c, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe55c, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe65c, 0x00000000, REGISTER_TYPE_FLEX ) );
         MD_CHECK_CC( RefreshConfigRegisters() );
 
         return CC_OK;
@@ -6321,7 +6367,7 @@ namespace MetricsDiscoveryInternal::MetricSets_LNL_OA
             "GPU", ( METRIC_GROUP_NAME_ID_GPU * 0x1000000 ), USAGE_FLAG_TIER_1 | USAGE_FLAG_OVERVIEW | USAGE_FLAG_SYSTEM | USAGE_FLAG_FRAME | USAGE_FLAG_BATCH | USAGE_FLAG_DRAW, API_TYPE_DX9 | API_TYPE_DX10 | API_TYPE_DX11 | API_TYPE_DX12 | API_TYPE_VULKAN | API_TYPE_OGL | API_TYPE_OGL4_X | API_TYPE_OCL | API_TYPE_IOSTREAM,
             METRIC_TYPE_EVENT, RESULT_UINT64, "ns", 0, 0, HW_UNIT_GPU, nullptr, nullptr, nullptr, 0 );
         MD_CHECK_PTR( metric );
-        MD_CHECK_CC( metric->SetSnapshotReportReadEquation( "qw@0x08 100 UMUL $GpuTimestampFrequency 100000 UDIV UDIV 100 UMUL" ) );
+        MD_CHECK_CC( metric->SetSnapshotReportReadEquation( "qw@0x08 10000 UMUL $GpuTimestampFrequency 100000 UDIV UDIV" ) );
         MD_CHECK_CC( metric->SetDeltaReportReadEquation( "qw@0" ) );
         MD_CHECK_CC( metric->SetSnapshotReportDeltaFunction( "NS_TIME" ) );
         metric->SetQueryModeMask( QUERY_MODE_MASK_RENDER | QUERY_MODE_MASK_COMPUTE | QUERY_MODE_MASK_GLOBAL | QUERY_MODE_MASK_GLOBAL_EXTENDED );
@@ -6773,7 +6819,7 @@ namespace MetricsDiscoveryInternal::MetricSets_LNL_OA
             "GPU", ( METRIC_GROUP_NAME_ID_GPU * 0x1000000 ), USAGE_FLAG_TIER_1 | USAGE_FLAG_OVERVIEW | USAGE_FLAG_SYSTEM | USAGE_FLAG_FRAME | USAGE_FLAG_BATCH | USAGE_FLAG_DRAW, API_TYPE_DX9 | API_TYPE_DX10 | API_TYPE_DX11 | API_TYPE_DX12 | API_TYPE_VULKAN | API_TYPE_OGL | API_TYPE_OGL4_X | API_TYPE_OCL | API_TYPE_IOSTREAM,
             METRIC_TYPE_EVENT, RESULT_UINT64, "ns", 0, 0, HW_UNIT_GPU, nullptr, nullptr, nullptr, 0 );
         MD_CHECK_PTR( metric );
-        MD_CHECK_CC( metric->SetSnapshotReportReadEquation( "qw@0x08 100 UMUL $GpuTimestampFrequency 100000 UDIV UDIV 100 UMUL" ) );
+        MD_CHECK_CC( metric->SetSnapshotReportReadEquation( "qw@0x08 10000 UMUL $GpuTimestampFrequency 100000 UDIV UDIV" ) );
         MD_CHECK_CC( metric->SetDeltaReportReadEquation( "qw@0" ) );
         MD_CHECK_CC( metric->SetSnapshotReportDeltaFunction( "NS_TIME" ) );
         metric->SetQueryModeMask( QUERY_MODE_MASK_RENDER | QUERY_MODE_MASK_COMPUTE | QUERY_MODE_MASK_GLOBAL | QUERY_MODE_MASK_GLOBAL_EXTENDED );
@@ -7225,7 +7271,7 @@ namespace MetricsDiscoveryInternal::MetricSets_LNL_OA
             "GPU", ( METRIC_GROUP_NAME_ID_GPU * 0x1000000 ), USAGE_FLAG_TIER_1 | USAGE_FLAG_OVERVIEW | USAGE_FLAG_SYSTEM | USAGE_FLAG_FRAME | USAGE_FLAG_BATCH | USAGE_FLAG_DRAW, API_TYPE_DX9 | API_TYPE_DX10 | API_TYPE_DX11 | API_TYPE_DX12 | API_TYPE_VULKAN | API_TYPE_OGL | API_TYPE_OGL4_X | API_TYPE_OCL | API_TYPE_IOSTREAM,
             METRIC_TYPE_EVENT, RESULT_UINT64, "ns", 0, 0, HW_UNIT_GPU, nullptr, nullptr, nullptr, 0 );
         MD_CHECK_PTR( metric );
-        MD_CHECK_CC( metric->SetSnapshotReportReadEquation( "qw@0x08 100 UMUL $GpuTimestampFrequency 100000 UDIV UDIV 100 UMUL" ) );
+        MD_CHECK_CC( metric->SetSnapshotReportReadEquation( "qw@0x08 10000 UMUL $GpuTimestampFrequency 100000 UDIV UDIV" ) );
         MD_CHECK_CC( metric->SetDeltaReportReadEquation( "qw@0" ) );
         MD_CHECK_CC( metric->SetSnapshotReportDeltaFunction( "NS_TIME" ) );
         metric->SetQueryModeMask( QUERY_MODE_MASK_RENDER | QUERY_MODE_MASK_COMPUTE | QUERY_MODE_MASK_GLOBAL | QUERY_MODE_MASK_GLOBAL_EXTENDED );
@@ -7485,6 +7531,13 @@ namespace MetricsDiscoveryInternal::MetricSets_LNL_OA
         MD_CHECK_CC( AddStartConfigRegister( 0x1351c, 0x00000000, REGISTER_TYPE_OA ) );
         MD_CHECK_CC( AddStartConfigRegister( 0x13718, 0x00007e00, REGISTER_TYPE_OA ) );
         MD_CHECK_CC( AddStartConfigRegister( 0x1371c, 0x00000000, REGISTER_TYPE_OA ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe458, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe558, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe658, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe758, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe45c, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe55c, 0x00000000, REGISTER_TYPE_FLEX ) );
+        MD_CHECK_CC( AddStartConfigRegister( 0xe65c, 0x00000000, REGISTER_TYPE_FLEX ) );
         MD_CHECK_CC( RefreshConfigRegisters() );
 
         return CC_OK;
@@ -7503,7 +7556,7 @@ namespace MetricsDiscoveryInternal::MetricSets_LNL_OAM0
 
         information = concurrentGroup->AddInformation( "QueryBeginTime", "Query Begin Time", "The measurement begin time.", "Report Meta Data", API_TYPE_IOSTREAM, INFORMATION_TYPE_TIMESTAMP, "ns", nullptr, 0 );
         MD_CHECK_PTR( information );
-        MD_CHECK_CC( information->SetSnapshotReportReadEquation( "qw@0x08 100 UMUL $GpuTimestampFrequency 100000 UDIV UDIV 100 UMUL" ) );
+        MD_CHECK_CC( information->SetSnapshotReportReadEquation( "qw@0x08 625 UMUL $GpuTimestampFrequency 1600000 UDIV UDIV" ) );
         MD_CHECK_CC( information->SetOverflowFunction( "NS_TIME" ) );
 
         information = concurrentGroup->AddInformation( "ReportReason", "Report Reason", "The reason of the report.", "Report Meta Data", API_TYPE_IOSTREAM, INFORMATION_TYPE_REPORT_REASON, nullptr, nullptr, 1 );
@@ -7544,7 +7597,7 @@ namespace MetricsDiscoveryInternal::MetricSets_LNL_OAM0
             "GPU", ( METRIC_GROUP_NAME_ID_GPU * 0x1000000 ), USAGE_FLAG_TIER_1 | USAGE_FLAG_OVERVIEW | USAGE_FLAG_SYSTEM | USAGE_FLAG_BATCH, API_TYPE_IOSTREAM,
             METRIC_TYPE_EVENT, RESULT_UINT64, "ns", 0, 0, HW_UNIT_GPU, nullptr, nullptr, nullptr, 0 );
         MD_CHECK_PTR( metric );
-        MD_CHECK_CC( metric->SetSnapshotReportReadEquation( "qw@0x08 100 UMUL $GpuTimestampFrequency 100000 UDIV UDIV 100 UMUL" ) );
+        MD_CHECK_CC( metric->SetSnapshotReportReadEquation( "qw@0x08 10000 UMUL $GpuTimestampFrequency 100000 UDIV UDIV" ) );
         MD_CHECK_CC( metric->SetSnapshotReportDeltaFunction( "NS_TIME" ) );
 
         metric = AddMetric( "GpuCoreClocks", "GPU Media Clocks",
@@ -7676,7 +7729,7 @@ namespace MetricsDiscoveryInternal::MetricSets_LNL_OAM0
             "GPU", ( METRIC_GROUP_NAME_ID_GPU * 0x1000000 ), USAGE_FLAG_TIER_1 | USAGE_FLAG_OVERVIEW | USAGE_FLAG_SYSTEM | USAGE_FLAG_BATCH, API_TYPE_IOSTREAM,
             METRIC_TYPE_EVENT, RESULT_UINT64, "ns", 0, 0, HW_UNIT_GPU, nullptr, nullptr, nullptr, 0 );
         MD_CHECK_PTR( metric );
-        MD_CHECK_CC( metric->SetSnapshotReportReadEquation( "qw@0x08 100 UMUL $GpuTimestampFrequency 100000 UDIV UDIV 100 UMUL" ) );
+        MD_CHECK_CC( metric->SetSnapshotReportReadEquation( "qw@0x08 10000 UMUL $GpuTimestampFrequency 100000 UDIV UDIV" ) );
         MD_CHECK_CC( metric->SetSnapshotReportDeltaFunction( "NS_TIME" ) );
 
         metric = AddMetric( "GpuCoreClocks", "GPU Media Clocks",
@@ -7782,7 +7835,7 @@ namespace MetricsDiscoveryInternal::MetricSets_LNL_OAMG
 
         information = concurrentGroup->AddInformation( "QueryBeginTime", "Query Begin Time", "The measurement begin time.", "Report Meta Data", API_TYPE_IOSTREAM, INFORMATION_TYPE_TIMESTAMP, "ns", nullptr, 0 );
         MD_CHECK_PTR( information );
-        MD_CHECK_CC( information->SetSnapshotReportReadEquation( "qw@0x08 100 UMUL $GpuTimestampFrequency 100000 UDIV UDIV 100 UMUL" ) );
+        MD_CHECK_CC( information->SetSnapshotReportReadEquation( "qw@0x08 625 UMUL $GpuTimestampFrequency 1600000 UDIV UDIV" ) );
         MD_CHECK_CC( information->SetOverflowFunction( "NS_TIME" ) );
 
         information = concurrentGroup->AddInformation( "ReportReason", "Report Reason", "The reason of the report.", "Report Meta Data", API_TYPE_IOSTREAM, INFORMATION_TYPE_REPORT_REASON, nullptr, nullptr, 1 );
@@ -7823,7 +7876,7 @@ namespace MetricsDiscoveryInternal::MetricSets_LNL_OAMG
             "GPU", ( METRIC_GROUP_NAME_ID_GPU * 0x1000000 ), USAGE_FLAG_TIER_1 | USAGE_FLAG_OVERVIEW | USAGE_FLAG_SYSTEM | USAGE_FLAG_BATCH, API_TYPE_IOSTREAM,
             METRIC_TYPE_EVENT, RESULT_UINT64, "ns", 0, 0, HW_UNIT_GPU, nullptr, nullptr, nullptr, 0 );
         MD_CHECK_PTR( metric );
-        MD_CHECK_CC( metric->SetSnapshotReportReadEquation( "qw@0x08 100 UMUL $GpuTimestampFrequency 100000 UDIV UDIV 100 UMUL" ) );
+        MD_CHECK_CC( metric->SetSnapshotReportReadEquation( "qw@0x08 10000 UMUL $GpuTimestampFrequency 100000 UDIV UDIV" ) );
         MD_CHECK_CC( metric->SetSnapshotReportDeltaFunction( "NS_TIME" ) );
 
         metric = AddMetric( "GpuCoreClocks", "GPU Media Clocks",

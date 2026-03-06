@@ -159,8 +159,6 @@ namespace MetricsDiscoveryInternal
         TQueryCalculationContext* qc = &context.QueryCalculationContext;
         MD_CHECK_PTR_RET( qc->Calculator, CC_ERROR_INVALID_PARAMETER );
 
-        const uint32_t adapterId = qc->Calculator->GetMetricsDevice().GetAdapter().GetAdapterId();
-
         qc->Calculator->Reset();
 
         auto& metricSetParams = *qc->MetricSet->GetParams();
@@ -440,7 +438,7 @@ namespace MetricsDiscoveryInternal
     //
     //////////////////////////////////////////////////////////////////////////////
     template <>
-    bool CMetricsCalculationManager<MEASUREMENT_TYPE_DELTA_QUERY>::CalculateNextAsyncReport( TCalculationContext& context )
+    bool CMetricsCalculationManager<MEASUREMENT_TYPE_DELTA_QUERY>::CalculateNextAsyncReport( [[maybe_unused]] TCalculationContext& context )
     {
         return false;
     }

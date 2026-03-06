@@ -1192,7 +1192,7 @@ typedef struct GTDITimerModeEnableInStruct
     GTDI_REPORT_TYPE       ReportType;      // multi report type
     uint32_t               TimerPeriod;     // proposed timer period in nanoseconds
     uint32_t               OaBufferSize;    // proposed OA buffer size
-    GTDI_CONFIGURATION_SET ConfigurationId; // used only in IOSTREAM sampling type
+    GTDI_CONFIGURATION_SET ConfigurationId; // obsolete
 } GTDITimerModeEnableIn;
 
 /******************************************************************************/

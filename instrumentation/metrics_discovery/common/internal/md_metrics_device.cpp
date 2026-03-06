@@ -140,10 +140,10 @@ namespace MetricsDiscoveryInternal
     //     Returns metrics device params.
     //
     // Output:
-    //     TMetricsDeviceParams_1_0*  - pointer to metrics device params
+    //     TMetricsDeviceParamsLatest* - pointer to metrics device params
     //
     //////////////////////////////////////////////////////////////////////////////
-    TMetricsDeviceParams_1_2* CMetricsDevice::GetParams( void )
+    TMetricsDeviceParamsLatest* CMetricsDevice::GetParams( void )
     {
         return &m_params;
     }

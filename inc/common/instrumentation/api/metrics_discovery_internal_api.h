@@ -13,8 +13,6 @@ SPDX-License-Identifier: MIT
 #pragma once
 
 #include "metrics_discovery_api.h"
-#include "md_per_platform_preamble.h"
-#include "instr_gt_driver_ifc.h"
 
 namespace MetricsDiscovery
 {

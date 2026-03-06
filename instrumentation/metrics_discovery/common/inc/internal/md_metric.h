@@ -37,8 +37,8 @@ namespace MetricsDiscoveryInternal
     class CMetric : public IMetricLatest
     {
     public:
-        // API 1.13:
-        virtual TMetricParamsLatest* GetParams( void );
+        // API 1.0:
+        virtual TMetricParamsLatest* GetParams( void ) final;
 
     public:
         // Constructor & Destructor:

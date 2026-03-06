@@ -143,36 +143,6 @@ namespace MetricsDiscoveryInternal
     //     CMERTConcurrentGroup
     //
     // Method:
-    //     GetStreamTypeFromSamplingType
-    //
-    // Description:
-    //     Returns stream type based on given sampling type.
-    //
-    // Input:
-    //     const TSamplingType samplingType - sampling type
-    //     TStreamType&        streamType   - (out) stream type
-    //
-    // Output:
-    //     TCompletionCode                  - result of operation (*CC_OK* is OK)
-    //
-    //////////////////////////////////////////////////////////////////////////////
-    TCompletionCode CMERTConcurrentGroup::GetStreamTypeFromSamplingType( const TSamplingType samplingType, TStreamType& streamType ) const
-    {
-        if( samplingType == SAMPLING_TYPE_OAMERT_TIMER )
-        {
-            streamType = STREAM_TYPE_OAMERT;
-            return CC_OK;
-        }
-
-        return CC_ERROR_NOT_SUPPORTED;
-    }
-
-    //////////////////////////////////////////////////////////////////////////////
-    //
-    // Class:
-    //     CMERTConcurrentGroup
-    //
-    // Method:
     //     IsSupported
     //
     // Description:

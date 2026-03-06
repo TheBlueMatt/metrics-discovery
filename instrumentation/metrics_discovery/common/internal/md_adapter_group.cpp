@@ -258,7 +258,7 @@ namespace MetricsDiscoveryInternal
 
         if( !m_offlineAdapter )
         {
-            m_offlineAdapter = new( std::nothrow ) CAdapter( *this );
+            m_offlineAdapter = new( std::nothrow ) CAdapter();
             MD_CHECK_PTR( m_offlineAdapter );
         }
 
@@ -663,14 +663,14 @@ namespace MetricsDiscoveryInternal
     {
         MD_CHECK_PTR_RET( adapterData.Handle, CC_ERROR_INVALID_PARAMETER );
 
-        auto adapter = new( std::nothrow ) CAdapter( *this, adapterData.Params, *adapterData.Handle );
+        auto adapter = new( std::nothrow ) CAdapter( adapterData.Params, *adapterData.Handle );
         MD_CHECK_PTR_RET( adapter, CC_ERROR_NO_MEMORY );
 
         m_adapterVector.push_back( adapter );
         m_params.AdapterCount = static_cast<uint32_t>( m_adapterVector.size() );
 
-        const TAdapterParamsLatest* adapterParams = adapter->GetParams();
-        const uint32_t              adapterId     = adapter->GetAdapterId();
+        [[maybe_unused]] const TAdapterParamsLatest* adapterParams = adapter->GetParams();
+        const uint32_t                               adapterId     = adapter->GetAdapterId();
 
         MD_LOG_A( adapterId, LOG_INFO, "Adapter %s - added", adapterParams->ShortName );
         MD_LOG_A( adapterId, LOG_INFO, "Platform ID: %u", adapterParams->Platform );

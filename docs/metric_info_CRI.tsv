@@ -60,7 +60,7 @@ ComputeBasic	L3_ATOMIC_ACCESS	L3 Atomic Access	Device Cache	Number of atomic acc
 ComputeBasic	L3_HIT	L3 Hit	Device Cache	Number of Device Cache accesses which hits in the Device Cache cache
 ComputeBasic	L3_MISS	L3 Miss	Device Cache	Number of Device Cache accesses which miss in the Device Cache cache
 ComputeBasic	L3_SUPERQ_FULL	L3 Superq Full	Device Cache	Percentage of time in which all slots in Device Cache request queue are waiting for data return / response
-ComputeBasic	XVE_INST_EXECUTED_ALU3_ALL	XVE Inst Executed Alu3 All	Vector Engine	Number of execution slots taken by instructions executed in ALU3 pipe
+ComputeBasic	XVE_INST_EXECUTED_ALU3_ALL	XVE Inst Executed ALU3 All	Vector Engine	Number of execution slots taken by instructions executed in ALU3 pipe
 ComputeBasic	XVE_GRFBLOCK_OCCUPANCY_ALL	XVE Grfblock Occupancy All	Vector Engine	Number of GRF register blocks occupied
 ComputeBasic	XVE_INST_LANE_ENABLED	XVE Inst Lane Enabled	Vector Engine	Number of execution lanes enabled for instructions executed on ALU0 and ALU1. Does not include control-flow instructions such as CALL, CALLA, RET, etc.
 ComputeBasic	XVE_INST_LANE_TOTAL	XVE Inst Lane Total	Vector Engine	Number of available execution lanes (enabled and not enabled) for instructions executed on ALU0 and ALU1, evaluated after shootdown. Does not include control-flow instructions such as CALL, CALLA, RET, etc.

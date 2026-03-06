@@ -941,8 +941,6 @@ namespace MetricsDiscoveryInternal
     //////////////////////////////////////////////////////////////////////////////
     TCompletionCode CMetricSet::Finalize()
     {
-        const uint32_t adapterId = m_device.GetAdapter().GetAdapterId();
-
         if( !m_prototypeManager || !m_prototypeManager->IsSupported() )
         {
             m_isOpened = false;
@@ -1627,7 +1625,7 @@ namespace MetricsDiscoveryInternal
                 }
 
                 // Send configurations
-                ret = driverInterface.SendPmRegsConfig( pmRegs.data(), static_cast<uint32_t>( pmRegs.size() ), m_device.GetSubDeviceIndex(), oaConcurrentGroup.GetOaBufferType() );
+                ret = driverInterface.SendPmRegsConfig( pmRegs, m_device.GetSubDeviceIndex(), oaConcurrentGroup.GetOaBufferType(), m_reportType );
                 if( ret == CC_OK && readRegs.size() )
                 {
                     ret = driverInterface.SendReadRegsConfig( readRegs.data(), static_cast<uint32_t>( readRegs.size() ) );
@@ -3453,7 +3451,7 @@ namespace MetricsDiscoveryInternal
 
         if( isXe2PlusPlatform )
         {
-            MD_CHECK_CC( metric->SetSnapshotReportReadEquation( "qw@0x08 100 UMUL $GpuTimestampFrequency 100000 UDIV UDIV 100 UMUL" ) );
+            MD_CHECK_CC( metric->SetSnapshotReportReadEquation( "qw@0x08 10000 UMUL $GpuTimestampFrequency 100000 UDIV UDIV" ) );
         }
         else
         {

@@ -456,8 +456,7 @@ namespace MetricsDiscoveryInternal
                 break;
 
             default:
-                const uint32_t adapterId = m_metricEnumerator.GetMetricsDevice().GetAdapter().GetAdapterId();
-                MD_ASSERT_A( adapterId, false );
+                MD_ASSERT_A( m_metricEnumerator.GetMetricsDevice().GetAdapter().GetAdapterId(), false );
                 return "";
         }
 

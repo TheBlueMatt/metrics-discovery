@@ -52,7 +52,6 @@ function(clearInputVariables)
     unset(CMAKE_SYSTEM_NAME CACHE)
     unset(CMAKE_BUILD_TYPE CACHE)
     unset(MD_ARCH CACHE)
-    unset(MD_LIBDRM_SRC CACHE)
     unset(MD_LINUX_DISTRO CACHE)
 endfunction()
 
@@ -73,7 +72,6 @@ if (${CMAKE_VERBOSE_MAKEFILE} STREQUAL ON)
     message("INFO: Input CMAKE_SYSTEM_NAME = ${CMAKE_SYSTEM_NAME}")
     message("INFO: Input CMAKE_BUILD_TYPE  = ${CMAKE_BUILD_TYPE}")
     message("INFO: Input MD_ARCH           = ${MD_ARCH}")
-    message("INFO: Input MD_LIBDRM_SRC     = ${MD_LIBDRM_SRC}")
     message("INFO: Input MD_LINUX_DISTRO   = ${MD_LINUX_DISTRO}")
 endif()
 
@@ -138,19 +136,6 @@ endif()
 if (MD_LINUX_DISTRO)
     set(LINUX_DISTRO ${MD_LINUX_DISTRO})
 endif()
-
-# LIBDRM
-if (NOT (MD_LIBDRM_SRC))
-    if ("${PLATFORM}" STREQUAL "linux")
-        set(LIBDRM_SRC /usr/include/libdrm)
-    else()
-        message(WARNING "WARNING: MD_LIBDRM_SRC not specified (-DMD_LIBDRM_SRC=...)")
-    endif()
-else()
-    set(LIBDRM_SRC ${MD_LIBDRM_SRC})
-endif()
-
-set(DRM_LIB_PATH drm)
 
 # PATHS
 set(BS_DIR_INSTRUMENTATION ${CMAKE_CURRENT_SOURCE_DIR}/instrumentation)

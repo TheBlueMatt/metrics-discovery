@@ -37,9 +37,9 @@ namespace MetricsDiscoveryInternal
     {
     public:
         // API 1.13:
-        virtual IMetricEnumerator_1_13* GetMetricEnumerator( void ) override;
+        virtual IMetricEnumerator_1_13* GetMetricEnumerator( void ) final;
 
-        virtual IMetricSet_1_13* AddMetricSet( const char* symbolName, const char* shortName ) override;
+        virtual IMetricSet_1_13* AddMetricSet( const char* symbolName, const char* shortName ) final;
 
     public:
         // Constructor & Destructor:
@@ -48,9 +48,6 @@ namespace MetricsDiscoveryInternal
 
         COAMConcurrentGroup( const COAMConcurrentGroup& )            = delete; // Delete copy-constructor
         COAMConcurrentGroup& operator=( const COAMConcurrentGroup& ) = delete; // Delete assignment operator
-
-    protected:
-        virtual TCompletionCode GetStreamTypeFromSamplingType( const TSamplingType samplingType, TStreamType& streamType ) const override;
 
     public:
         // Static methods:

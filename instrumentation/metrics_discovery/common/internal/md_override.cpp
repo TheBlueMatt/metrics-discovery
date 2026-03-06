@@ -559,6 +559,10 @@ namespace MetricsDiscoveryInternal
     template <TOverrideType overrideType>
     TCompletionCode COverride<overrideType>::SetOverride( TSetOverrideParams_1_2* params, uint32_t paramsSize )
     {
+        // In template methods [[maybe_unused]] is ignored by older GCC versions.
+        (void) params;
+        (void) paramsSize;
+
         const uint32_t adapterId = m_device.GetAdapter().GetAdapterId();
         MD_LOG_A( adapterId, LOG_ERROR, "Override %u not supported in global mode", overrideType );
         return CC_ERROR_NOT_SUPPORTED;

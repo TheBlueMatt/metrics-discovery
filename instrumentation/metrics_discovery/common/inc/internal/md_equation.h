@@ -66,8 +66,8 @@ namespace MetricsDiscoveryInternal
     {
     public:
         // API 1.0:
-        virtual uint32_t              GetEquationElementsCount();
-        virtual TEquationElement_1_0* GetEquationElement( uint32_t index );
+        virtual uint32_t              GetEquationElementsCount() final;
+        virtual TEquationElement_1_0* GetEquationElement( uint32_t index ) final;
 
     public:
         // Constructor and Destructor:

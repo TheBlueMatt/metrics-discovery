@@ -88,28 +88,28 @@ namespace MetricsDiscoveryInternal
         TCompletionCode QueryDrm( drm_i915_query& query );
 
         // Read global symbols per tile.
-        virtual TCompletionCode GetEuCoresTotalCount( GTDIDeviceInfoParamExtOut& out, CMetricsDevice& metricsDevice );
-        virtual TCompletionCode GetEuCoresPerSubsliceCount( GTDIDeviceInfoParamExtOut& out, CMetricsDevice& metricsDevice );
-        virtual TCompletionCode GetSliceMask( int32_t& sliceMask, CMetricsDevice& metricsDevice );
-        virtual TCompletionCode GetSubsliceMask( int64_t& subsliceMask, CMetricsDevice& metricsDevice );
+        virtual TCompletionCode GetEuCoresTotalCount( GTDIDeviceInfoParamExtOut& out, CMetricsDevice& metricsDevice ) final;
+        virtual TCompletionCode GetEuCoresPerSubsliceCount( GTDIDeviceInfoParamExtOut& out, CMetricsDevice& metricsDevice ) final;
+        virtual TCompletionCode GetSliceMask( int32_t& sliceMask, CMetricsDevice& metricsDevice ) final;
+        virtual TCompletionCode GetSubsliceMask( int64_t& subsliceMask, CMetricsDevice& metricsDevice ) final;
 
         // General
-        virtual TCompletionCode GetGpuCpuTimestamps( CMetricsDevice& device, uint64_t& gpuTimestamp, uint64_t& cpuTimestamp, uint32_t& cpuId, uint64_t& correlationIndicator );
-        virtual bool            IsTbsEngineValid( const TEngineParamsLatest& engineParams, const uint32_t requestedInstance = -1, const bool isOam = false ) const;
+        virtual TCompletionCode GetGpuCpuTimestamps( CMetricsDevice& device, uint64_t& gpuTimestamp, uint64_t& cpuTimestamp, uint32_t& cpuId, uint64_t& correlationIndicator ) final;
+        virtual bool            IsTbsEngineValid( const TEngineParamsLatest& engineParams, const uint32_t requestedInstance = -1, const bool isOam = false ) const final;
 
         // Overrides
-        virtual bool            IsSubDeviceSupported();
-        virtual TCompletionCode EnumerateSubDevices( CSubDevices& subDevices );
+        virtual bool            IsSubDeviceSupported() final;
+        virtual TCompletionCode EnumerateSubDevices( CSubDevices& subDevices ) final;
 
     protected:
         TCompletionCode GetEngines( std::vector<prelim_drm_i915_engine_info>& engines );
         TCompletionCode GetMemoryRegions( std::vector<drm_i915_memory_region_info>& regions );
         TCompletionCode GetEngineDistances( const std::vector<prelim_drm_i915_engine_info>& engines, const std::vector<drm_i915_memory_region_info>& regions, std::vector<prelim_drm_i915_query_distance_info>& distances, std::vector<uint32_t>& oaUnits );
         TCompletionCode GetSubDeviceEngines( CSubDevices& subDevices, const std::vector<prelim_drm_i915_query_distance_info>& distances, const std::vector<uint32_t>& oaUnits );
-        virtual bool    CreateContext();
+        virtual bool    CreateContext() final;
 
         // SysFs
-        virtual void GetSysFsPath( CMetricsDevice& device, const TSysFsType fileType, char* filePath, const uint32_t filePathLength );
+        virtual void GetSysFsPath( CMetricsDevice& device, const TSysFsType fileType, char* filePath, const uint32_t filePathLength ) final;
 
     private:
         // Perf
@@ -118,13 +118,13 @@ namespace MetricsDiscoveryInternal
         void PrintPerfCapabilities();
 
         // OA Stream
-        virtual TCompletionCode OpenOaStream( CMetricsDevice& metricsDevice, uint32_t oaMetricSetId, uint32_t oaReportType, uint32_t oaReportSize, uint32_t timerPeriodExponent, uint32_t bufferSize, const GTDI_OA_BUFFER_TYPE oaBufferType );
-        virtual TCompletionCode ReadOaStream( CMetricsDevice& metricsDevice, uint32_t reportSize, uint32_t reportsToRead, char* reportData, uint32_t& readBytes, GTDIReadCounterStreamExceptions& exceptions );
-        virtual TCompletionCode AddOaConfig( TRegister** regVector, const uint32_t regCount, const uint32_t subDeviceIndex, const char* requestedGuid, int32_t& addedConfigId );
-        virtual TCompletionCode RemoveOaConfig( int32_t oaConfigId );
-        virtual uint32_t        GetOaReportType( const TReportType reportType );
-        virtual TCompletionCode GetOaTimestampFrequency( uint64_t& frequency );
-        virtual TCompletionCode GetCsTimestampFrequency( uint64_t& frequency );
+        virtual TCompletionCode OpenOaStream( CMetricsDevice& metricsDevice, uint32_t oaMetricSetId, uint32_t oaReportType, uint32_t oaReportSize, uint32_t timerPeriodExponent, uint32_t bufferSize, const GTDI_OA_BUFFER_TYPE oaBufferType ) final;
+        virtual TCompletionCode ReadOaStream( CMetricsDevice& metricsDevice, uint32_t reportSize, uint32_t reportsToRead, char* reportData, uint32_t& readBytes, GTDIReadCounterStreamExceptions& exceptions ) final;
+        virtual TCompletionCode AddOaConfig( TRegister** regVector, const uint32_t regCount, const uint32_t subDeviceIndex, const char* requestedGuid, int32_t& addedConfigId ) final;
+        virtual TCompletionCode RemoveOaConfig( int32_t oaConfigId ) final;
+        virtual uint32_t        GetOaReportType( const TReportType reportType ) final;
+        virtual TCompletionCode GetOaTimestampFrequency( uint64_t& frequency ) final;
+        virtual TCompletionCode GetCsTimestampFrequency( uint64_t& frequency ) final;
         TCompletionCode         UpdateTbsEngineParams( CMetricsDevice& metricsDevice, std::vector<uint64_t>& properties );
         bool                    IsOamSupported();
         bool                    IsOamRequested( const uint32_t reportType );
@@ -137,8 +137,8 @@ namespace MetricsDiscoveryInternal
         uint32_t GetQueryDrmDataLength( const uint32_t queryId, const uint32_t flags = 0 );
 
         // Device info params
-        virtual TCompletionCode GetDeviceId( int32_t& deviceId );
-        virtual TCompletionCode GetRevisionId( int32_t& revisionId );
+        virtual TCompletionCode GetDeviceId( int32_t& deviceId ) final;
+        virtual TCompletionCode GetRevisionId( int32_t& revisionId ) final;
         TCompletionCode         GetPerfRevision( int32_t& revision );
         TCompletionCode         GetCpuTimestampNs( uint64_t& cpuTimestampNs );
         TCompletionCode         GetGpuTimestampNs( CMetricsDevice& metricsDevice, uint64_t& gpuTimestampNs );
@@ -149,18 +149,18 @@ namespace MetricsDiscoveryInternal
         TCompletionCode SendGetParamIoctl( uint32_t paramId, GTDIDeviceInfoParamExtOut& outValue );
         TCompletionCode SendGetParamIoctl( uint32_t paramId, int32_t& outValue );
 
-        virtual TCompletionCode GetOaBufferSize( const int32_t streamId, uint32_t& oaBufferSize );
-        virtual TCompletionCode GetOaBufferSupportedSizes( const uint32_t platformId, uint32_t& minSize, uint32_t& maxSize );
-        virtual uint32_t        GetOaBufferCount( CMetricsDevice& metricsDevice );
-        virtual uint32_t        GetOaBufferMask( CMetricsDevice& metricsDevice );
-        virtual TCompletionCode GetL3NodeTotalCount( CMetricsDevice& metricsDevice, uint32_t& l3NodeCount );
-        virtual TCompletionCode GetL3BankTotalCount( CMetricsDevice& metricsDevice, uint32_t& l3BankCount );
-        virtual TCompletionCode GetCopyEngineTotalCount( CMetricsDevice& metricsDevice, uint32_t& copyEngineCount );
-        virtual TCompletionCode GetComputeEngineTotalCount( CMetricsDevice& metricsDevice, uint32_t& computeEngineCount );
-        virtual TCompletionCode GetSqidiTotalCount( CMetricsDevice& metricsDevice, uint32_t& sqidiCount );
-        virtual TCompletionCode GetL3BankMask( CMetricsDevice& metricsDevice, uint64_t& l3BankMask );
-        virtual TCompletionCode GetL3NodeMask( CMetricsDevice& metricsDevice, uint64_t& l3NodeMask );
-        virtual TCompletionCode GetCopyEngineMask( CMetricsDevice& metricsDevice, uint64_t& copyEngineMask );
+        virtual TCompletionCode GetOaBufferSize( const int32_t streamId, uint32_t& oaBufferSize ) final;
+        virtual TCompletionCode GetOaBufferSupportedSizes( const uint32_t platformId, uint32_t& minSize, uint32_t& maxSize ) final;
+        virtual uint32_t        GetOaBufferCount( CMetricsDevice& metricsDevice ) final;
+        virtual uint32_t        GetOaBufferMask( CMetricsDevice& metricsDevice ) final;
+        virtual TCompletionCode GetL3NodeTotalCount( CMetricsDevice& metricsDevice, uint32_t& l3NodeCount ) final;
+        virtual TCompletionCode GetL3BankTotalCount( CMetricsDevice& metricsDevice, uint32_t& l3BankCount ) final;
+        virtual TCompletionCode GetCopyEngineTotalCount( CMetricsDevice& metricsDevice, uint32_t& copyEngineCount ) final;
+        virtual TCompletionCode GetComputeEngineTotalCount( CMetricsDevice& metricsDevice, uint32_t& computeEngineCount ) final;
+        virtual TCompletionCode GetSqidiTotalCount( CMetricsDevice& metricsDevice, uint32_t& sqidiCount ) final;
+        virtual TCompletionCode GetL3BankMask( CMetricsDevice& metricsDevice, uint64_t& l3BankMask ) final;
+        virtual TCompletionCode GetL3NodeMask( CMetricsDevice& metricsDevice, uint64_t& l3NodeMask ) final;
+        virtual TCompletionCode GetCopyEngineMask( CMetricsDevice& metricsDevice, uint64_t& copyEngineMask ) final;
 
     private:
         // Variables

@@ -473,11 +473,15 @@ namespace MetricsDiscoveryInternal
     // Description:
     //     Creates driver context.
     //
+    // Input:
+    //     CAdapterHandle& adapterHandle - reference to the adapter handle
+    //     TDrmVersion     version       - DRM version to use in this driver interface
+    //
     //////////////////////////////////////////////////////////////////////////////
-    CDriverInterfaceLinuxCommon::CDriverInterfaceLinuxCommon( CAdapterHandle& adapterHandle, const TDrmVersion drmVersion )
+    CDriverInterfaceLinuxCommon::CDriverInterfaceLinuxCommon( CAdapterHandle& adapterHandle, const TDrmVersion version )
         : m_DrmDeviceHandle( static_cast<CAdapterHandleLinux&>( adapterHandle ) )
         , m_DrmCardNumber( -1 )
-        , m_DrmVersion( drmVersion )
+        , m_DrmVersion( version )
         , m_CachedBoostFrequency( 0 )
         , m_CachedMinFrequency( 0 )
         , m_CachedMaxFrequency( 0 )
@@ -564,7 +568,7 @@ namespace MetricsDiscoveryInternal
     //     TCompletionCode - *CC_OK* means succeess
     //
     //////////////////////////////////////////////////////////////////////////////
-    TCompletionCode CDriverInterfaceLinuxCommon::SendSupportEnableEscape( bool enable )
+    TCompletionCode CDriverInterfaceLinuxCommon::SendSupportEnableEscape( [[maybe_unused]] bool enable )
     {
         // Not needed on Linux Perf
         return CC_OK;
@@ -1091,7 +1095,7 @@ namespace MetricsDiscoveryInternal
     //     TCompletionCode                         - *CC_OK* means succeess
     //
     //////////////////////////////////////////////////////////////////////////////
-    TCompletionCode CDriverInterfaceLinuxCommon::GetMaxMinOaBufferSize( const GTDI_OA_BUFFER_TYPE oaBufferType, const GTDI_DEVICE_PARAM param, GTDIDeviceInfoParamExtOut& out, CMetricsDevice& device )
+    TCompletionCode CDriverInterfaceLinuxCommon::GetMaxMinOaBufferSize( [[maybe_unused]] const GTDI_OA_BUFFER_TYPE oaBufferType, const GTDI_DEVICE_PARAM param, GTDIDeviceInfoParamExtOut& out, CMetricsDevice& device )
     {
         switch( param )
         {
@@ -1124,29 +1128,28 @@ namespace MetricsDiscoveryInternal
     //     is removed.
     //
     // Input:
-    //     TRegister**                 regVector      - array of pointers to registers to program
-    //     const uint32_t              regCount       - register count
+    //     std::vector<TRegister*>&    pmRegs         - array of pointers to registers to program
     //     const uint32_t              subDeviceIndex - sub device index
     //     const GTDI_OA_BUFFER_TYPE   oaBufferType   - oa buffer type
+    //     const TReportType           reportType     - report type
     //
     // Output:
     //     TCompletionCode                            - *CC_OK* means success
     //
     //////////////////////////////////////////////////////////////////////////////
-    TCompletionCode CDriverInterfaceLinuxCommon::SendPmRegsConfig( TRegister** regVector, const uint32_t regCount, const uint32_t subDeviceIndex, const GTDI_OA_BUFFER_TYPE oaBufferType )
+    TCompletionCode CDriverInterfaceLinuxCommon::SendPmRegsConfig( std::vector<TRegister*>& pmRegs, const uint32_t subDeviceIndex, [[maybe_unused]] const GTDI_OA_BUFFER_TYPE oaBufferType, const TReportType reportType )
     {
-        if( regCount == 0 ) // It's ok if regCount is 0, e.g. for PipelineStats metric set, which has no configuration (only QueryId)
+        if( pmRegs.size() == 0 ) // It's ok if pmRegs.size() is 0, e.g. for PipelineStats metric set, which has no configuration (only QueryId)
         {
             return CC_OK;
         }
 
         MD_LOG_ENTER_A( m_adapterId );
-        MD_CHECK_PTR_RET_A( m_adapterId, regVector, CC_ERROR_INVALID_PARAMETER );
 
         TCompletionCode ret = CC_OK;
 
         int32_t     addedConfigId = -1;
-        std::string guid          = GenerateQueryGuid( subDeviceIndex );
+        std::string guid          = GenerateQueryGuid( subDeviceIndex, reportType );
 
         MD_LOG_A( m_adapterId, LOG_DEBUG, "Generated guid: %s", guid.c_str() );
 
@@ -1163,7 +1166,7 @@ namespace MetricsDiscoveryInternal
         RemoveOaConfigQuery( guid.c_str() );
 
         // 2. ADD CONFIG
-        ret = AddOaConfig( regVector, regCount, subDeviceIndex, guid.c_str(), addedConfigId );
+        ret = AddOaConfig( pmRegs.data(), static_cast<uint32_t>( pmRegs.size() ), subDeviceIndex, guid.c_str(), addedConfigId );
         MD_ASSERT_A( m_adapterId, addedConfigId != -1 );
 
         // 3. REMEMBER ADDED CONFIG
@@ -1204,7 +1207,7 @@ namespace MetricsDiscoveryInternal
     //     TCompletionCode       - *CC_OK* means succeess
     //
     //////////////////////////////////////////////////////////////////////////////
-    TCompletionCode CDriverInterfaceLinuxCommon::SendReadRegsConfig( TRegister** regVector, uint32_t regCount )
+    TCompletionCode CDriverInterfaceLinuxCommon::SendReadRegsConfig( [[maybe_unused]] TRegister** regVector, [[maybe_unused]] uint32_t regCount )
     {
         return CC_ERROR_NOT_SUPPORTED;
     }
@@ -1229,7 +1232,7 @@ namespace MetricsDiscoveryInternal
     //     TCompletionCode           - *CC_OK* means succeess
     //
     //////////////////////////////////////////////////////////////////////////////
-    TCompletionCode CDriverInterfaceLinuxCommon::GetPmRegsConfigHandles( uint32_t* oaConfigHandle, uint32_t* rrConfigHandle )
+    TCompletionCode CDriverInterfaceLinuxCommon::GetPmRegsConfigHandles( [[maybe_unused]] uint32_t* oaConfigHandle, [[maybe_unused]] uint32_t* rrConfigHandle )
     {
         // Not supported on Linux - returning CC_OK on purpose
         return CC_OK;
@@ -1256,7 +1259,7 @@ namespace MetricsDiscoveryInternal
     //     TCompletionCode           - *CC_OK* means succeess
     //
     //////////////////////////////////////////////////////////////////////////////
-    TCompletionCode CDriverInterfaceLinuxCommon::ValidatePmRegsConfig( TRegister* regVector, uint32_t regCount, uint32_t platformId )
+    TCompletionCode CDriverInterfaceLinuxCommon::ValidatePmRegsConfig( [[maybe_unused]] TRegister* regVector, [[maybe_unused]] uint32_t regCount, [[maybe_unused]] uint32_t platformId )
     {
         // Not supported on Linux - returning CC_OK on purpose
         return CC_ERROR_NOT_SUPPORTED;
@@ -1281,7 +1284,7 @@ namespace MetricsDiscoveryInternal
     //     TCompletionCode             - *CC_OK* means succeess
     //
     //////////////////////////////////////////////////////////////////////////////
-    TCompletionCode CDriverInterfaceLinuxCommon::SendGetCtxIdTagsEscape( TGetCtxTagsIdParams* params )
+    TCompletionCode CDriverInterfaceLinuxCommon::SendGetCtxIdTagsEscape( [[maybe_unused]] TGetCtxTagsIdParams* params )
     {
         // Not supported on Linux - returning CC_OK on purpose
         return CC_ERROR_NOT_SUPPORTED;
@@ -1360,7 +1363,7 @@ namespace MetricsDiscoveryInternal
     //     TCompletionCode     - *CC_OK* means succeess
     //
     //////////////////////////////////////////////////////////////////////////////
-    TCompletionCode CDriverInterface::SemaphoreCreate( const char* name, void** semaphore, const uint32_t adapterId )
+    TCompletionCode CDriverInterface::SemaphoreCreate( [[maybe_unused]] const char* name, void** semaphore, const uint32_t adapterId )
     {
         MD_LOG_ENTER_A( adapterId );
         if( semaphore == nullptr )
@@ -1450,7 +1453,7 @@ namespace MetricsDiscoveryInternal
             return CC_ERROR_INVALID_PARAMETER;
         }
 
-        CSemaphore* _sem     = *( (CSemaphore**) semaphore );
+        CSemaphore* _sem     = *( reinterpret_cast<CSemaphore**>( semaphore ) );
         int32_t     semValue = 0;
 
         _sem->Notify();
@@ -1543,7 +1546,7 @@ namespace MetricsDiscoveryInternal
     //     TCompletionCode             - *CC_OK* means succeess
     //
     //////////////////////////////////////////////////////////////////////////////
-    TCompletionCode CDriverInterfaceLinuxCommon::UnlockConcurrentGroup( const char* name, void** semaphore )
+    TCompletionCode CDriverInterfaceLinuxCommon::UnlockConcurrentGroup( [[maybe_unused]] const char* name, void** semaphore )
     {
         MD_CHECK_PTR_RET_A( m_adapterId, semaphore, CC_ERROR_INVALID_PARAMETER );
         MD_CHECK_PTR_RET_A( m_adapterId, *semaphore, CC_ERROR_INVALID_PARAMETER );
@@ -1578,7 +1581,7 @@ namespace MetricsDiscoveryInternal
     //     TCompletionCode                       - *CC_OK* means succeess
     //
     //////////////////////////////////////////////////////////////////////////////
-    TCompletionCode CDriverInterfaceLinuxCommon::OpenIoStream( COAConcurrentGroup& oaConcurrentGroup, const uint32_t processId, uint32_t& nsTimerPeriod, uint32_t& bufferSize )
+    TCompletionCode CDriverInterfaceLinuxCommon::OpenIoStream( COAConcurrentGroup& oaConcurrentGroup, [[maybe_unused]] const uint32_t processId, uint32_t& nsTimerPeriod, uint32_t& bufferSize )
     {
         const char* concurrentGroupName = oaConcurrentGroup.GetParams()->SymbolName;
         auto&       metricsDevice       = oaConcurrentGroup.GetMetricsDevice();
@@ -1781,7 +1784,7 @@ namespace MetricsDiscoveryInternal
     //     TCompletionCode                                         - *CC_OK* means success
     //
     //////////////////////////////////////////////////////////////////////////////
-    TCompletionCode CDriverInterfaceLinuxCommon::HandleIoStreamExceptions( COAConcurrentGroup& oaConcurrentGroup, const uint32_t processId, uint32_t& reportCount, const GTDIReadCounterStreamExceptions exceptions )
+    TCompletionCode CDriverInterfaceLinuxCommon::HandleIoStreamExceptions( [[maybe_unused]] COAConcurrentGroup& oaConcurrentGroup, [[maybe_unused]] const uint32_t processId, [[maybe_unused]] uint32_t& reportCount, [[maybe_unused]] const GTDIReadCounterStreamExceptions exceptions )
     {
         // Not needed on Linux Perf - returning CC_OK on purpose
         return CC_OK;
@@ -1985,7 +1988,7 @@ namespace MetricsDiscoveryInternal
     //     TCompletionCode - result, *CC_OK* means success
     //
     //////////////////////////////////////////////////////////////////////////////
-    TCompletionCode CDriverInterfaceLinuxCommon::SetFreqChangeReportsOverride( bool enable )
+    TCompletionCode CDriverInterfaceLinuxCommon::SetFreqChangeReportsOverride( [[maybe_unused]] bool enable )
     {
         return CC_ERROR_NOT_SUPPORTED;
     }
@@ -2055,7 +2058,7 @@ namespace MetricsDiscoveryInternal
     //     TCompletionCode                                     - *CC_OK* means success
     //
     //////////////////////////////////////////////////////////////////////////////
-    TCompletionCode CDriverInterfaceLinuxCommon::SetQueryOverride( TOverrideType overrideType, uint32_t oaBufferSize, const TSetQueryOverrideParams_1_2& params )
+    TCompletionCode CDriverInterfaceLinuxCommon::SetQueryOverride( [[maybe_unused]] TOverrideType overrideType, [[maybe_unused]] uint32_t oaBufferSize, [[maybe_unused]] const TSetQueryOverrideParams_1_2& params )
     {
         return CC_ERROR_NOT_SUPPORTED;
     }
@@ -2162,15 +2165,16 @@ namespace MetricsDiscoveryInternal
     //
     // Input:
     //     const uint32_t subDeviceIndex - sub device index
+    //     const TReportType reportType   - report type
     //
     // Output:
     //     std::string                   - generated guid
     //
     //////////////////////////////////////////////////////////////////////////////
-    std::string CDriverInterfaceLinuxCommon::GenerateQueryGuid( const uint32_t subDeviceIndex )
+    std::string CDriverInterfaceLinuxCommon::GenerateQueryGuid( const uint32_t subDeviceIndex, [[maybe_unused]] const TReportType reportType )
     {
-        const std::string valueToReplace    = "42a7";
-        const uint32_t    maxSubDeviceIndex = std::pow( 2, valueToReplace.length() * 4 ) - 1;
+        const std::string subDeviceValueToReplace = "42a7";
+        const uint32_t    maxSubDeviceIndex       = std::pow( 2, subDeviceValueToReplace.length() * 4 ) - 1;
 
         if( subDeviceIndex > maxSubDeviceIndex )
         {
@@ -2186,10 +2190,10 @@ namespace MetricsDiscoveryInternal
         }
 
         std::stringstream stream;
-        stream << std::setfill( '0' ) << std::setw( valueToReplace.length() ) << std::hex << subDeviceIndex;
+        stream << std::setfill( '0' ) << std::setw( subDeviceValueToReplace.length() ) << std::hex << subDeviceIndex;
         std::string subDeviceIndexHexString( stream.str() );
 
-        return std::regex_replace( defaultGuid, std::regex( valueToReplace ), subDeviceIndexHexString.c_str() );
+        return std::regex_replace( defaultGuid, std::regex( subDeviceValueToReplace ), subDeviceIndexHexString.c_str() );
     }
 
     //////////////////////////////////////////////////////////////////////////////
@@ -3512,7 +3516,7 @@ namespace MetricsDiscoveryInternal
     //     TGfxGtType                          - graphics GT type, used by Intel driver
     //
     //////////////////////////////////////////////////////////////////////////////
-    TGfxGtType CDriverInterfaceLinuxCommon::MapDeviceInfoToInstrGtTypeGfxVer12( const TGfxDeviceInfo& gfxDeviceInfo, CMetricsDevice& metricsDevice )
+    TGfxGtType CDriverInterfaceLinuxCommon::MapDeviceInfoToInstrGtTypeGfxVer12( const TGfxDeviceInfo& gfxDeviceInfo, [[maybe_unused]] CMetricsDevice& metricsDevice )
     {
         TGfxGtType gtType = GFX_GTTYPE_UNDEFINED;
 

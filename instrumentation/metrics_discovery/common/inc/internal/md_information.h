@@ -48,7 +48,7 @@ namespace MetricsDiscoveryInternal
     {
     public:
         // API 1.0:
-        virtual TInformationParamsLatest* GetParams( void );
+        virtual TInformationParamsLatest* GetParams( void ) final;
 
     public:
         // Constructor & Destructor:

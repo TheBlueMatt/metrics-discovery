@@ -165,7 +165,7 @@ namespace MetricsDiscoveryInternal
     //     const char* filePath   - (OUT) a path to the system file
     //
     //////////////////////////////////////////////////////////////////////////////
-    void CDriverInterfaceLinuxPerf::GetSysFsPath( CMetricsDevice& device, const TSysFsType fileType, char* filePath, const uint32_t filePathLength )
+    void CDriverInterfaceLinuxPerf::GetSysFsPath( [[maybe_unused]] CMetricsDevice& device, const TSysFsType fileType, char* filePath, const uint32_t filePathLength )
     {
         const char* fileName = "";
 
@@ -227,7 +227,7 @@ namespace MetricsDiscoveryInternal
     //     TCompletionCode                  - *CC_OK* means succeess
     //
     //////////////////////////////////////////////////////////////////////////////
-    TCompletionCode CDriverInterfaceLinuxPerf::GetGpuCpuTimestamps( CMetricsDevice& device, uint64_t& gpuTimestamp, uint64_t& cpuTimestamp, uint32_t& cpuId, uint64_t& correlationIndicator )
+    TCompletionCode CDriverInterfaceLinuxPerf::GetGpuCpuTimestamps( CMetricsDevice& device, uint64_t& gpuTimestamp, uint64_t& cpuTimestamp, [[maybe_unused]] uint32_t& cpuId, [[maybe_unused]] uint64_t& correlationIndicator )
     {
         MD_LOG_ENTER_A( m_adapterId );
 
@@ -781,7 +781,7 @@ namespace MetricsDiscoveryInternal
     //////////////////////////////////////////////////////////////////////////////
     void CDriverInterfaceLinuxPerf::PrintPerfCapabilities()
     {
-        auto getSupportedString = []( bool supported )
+        [[maybe_unused]] auto getSupportedString = []( bool supported )
         {
             return supported ? "supported"
                              : "not supported";
@@ -823,7 +823,6 @@ namespace MetricsDiscoveryInternal
     TCompletionCode CDriverInterfaceLinuxPerf::OpenOaStream( CMetricsDevice& metricsDevice, uint32_t oaMetricSetId, uint32_t oaReportType, uint32_t oaReportSize, uint32_t timerPeriodExponent, uint32_t bufferSize, const GTDI_OA_BUFFER_TYPE oaBufferType )
     {
         TCompletionCode       ret                    = CC_ERROR_GENERAL;
-        int32_t               oaRevision             = -1;
         int32_t               oaEventFd              = -1;
         uint32_t              requiredEngineInstance = -1;
         const bool            isOamRequested         = IsOamRequested( oaReportType );
@@ -2452,7 +2451,7 @@ namespace MetricsDiscoveryInternal
     //     TCompletionCode               - *CC_OK* means success
     //
     //////////////////////////////////////////////////////////////////////////////
-    TCompletionCode CDriverInterfaceLinuxPerf::GetL3NodeTotalCount( CMetricsDevice& metricsDevice, uint32_t& l3NodeCount )
+    TCompletionCode CDriverInterfaceLinuxPerf::GetL3NodeTotalCount( [[maybe_unused]] CMetricsDevice& metricsDevice, [[maybe_unused]] uint32_t& l3NodeCount )
     {
         return CC_ERROR_NOT_SUPPORTED;
     }
@@ -2523,7 +2522,7 @@ namespace MetricsDiscoveryInternal
     //     TCompletionCode                 - *CC_OK* means success
     //
     //////////////////////////////////////////////////////////////////////////////
-    TCompletionCode CDriverInterfaceLinuxPerf::GetCopyEngineTotalCount( CMetricsDevice& metricsDevice, uint32_t& copyEngineCount )
+    TCompletionCode CDriverInterfaceLinuxPerf::GetCopyEngineTotalCount( [[maybe_unused]] CMetricsDevice& metricsDevice, [[maybe_unused]] uint32_t& copyEngineCount )
     {
         return CC_ERROR_NOT_SUPPORTED;
     }
@@ -2547,7 +2546,7 @@ namespace MetricsDiscoveryInternal
     //     TCompletionCode                      - *CC_OK* means success
     //
     //////////////////////////////////////////////////////////////////////////////
-    TCompletionCode CDriverInterfaceLinuxPerf::GetComputeEngineTotalCount( CMetricsDevice& metricsDevice, uint32_t& computeEngineCount )
+    TCompletionCode CDriverInterfaceLinuxPerf::GetComputeEngineTotalCount( [[maybe_unused]] CMetricsDevice& metricsDevice, [[maybe_unused]] uint32_t& computeEngineCount )
     {
         return CC_ERROR_NOT_SUPPORTED;
     }
@@ -2571,7 +2570,7 @@ namespace MetricsDiscoveryInternal
     //     TCompletionCode               - *CC_OK* means success
     //
     //////////////////////////////////////////////////////////////////////////////
-    TCompletionCode CDriverInterfaceLinuxPerf::GetSqidiTotalCount( CMetricsDevice& metricsDevice, uint32_t& sqidiCount )
+    TCompletionCode CDriverInterfaceLinuxPerf::GetSqidiTotalCount( [[maybe_unused]] CMetricsDevice& metricsDevice, [[maybe_unused]] uint32_t& sqidiCount )
     {
         return CC_ERROR_NOT_SUPPORTED;
     }
@@ -2595,7 +2594,7 @@ namespace MetricsDiscoveryInternal
     //     TCompletionCode               - *CC_OK* means success
     //
     //////////////////////////////////////////////////////////////////////////////
-    TCompletionCode CDriverInterfaceLinuxPerf::GetL3BankMask( CMetricsDevice& metricsDevice, uint64_t& l3BankMask )
+    TCompletionCode CDriverInterfaceLinuxPerf::GetL3BankMask( [[maybe_unused]] CMetricsDevice& metricsDevice, [[maybe_unused]] uint64_t& l3BankMask )
     {
         return CC_ERROR_NOT_SUPPORTED;
     }
@@ -2619,7 +2618,7 @@ namespace MetricsDiscoveryInternal
     //     TCompletionCode               - *CC_OK* means success
     //
     //////////////////////////////////////////////////////////////////////////////
-    TCompletionCode CDriverInterfaceLinuxPerf::GetL3NodeMask( CMetricsDevice& metricsDevice, uint64_t& l3NodeMask )
+    TCompletionCode CDriverInterfaceLinuxPerf::GetL3NodeMask( [[maybe_unused]] CMetricsDevice& metricsDevice, [[maybe_unused]] uint64_t& l3NodeMask )
     {
         return CC_ERROR_NOT_SUPPORTED;
     }
@@ -2643,7 +2642,7 @@ namespace MetricsDiscoveryInternal
     //     TCompletionCode                - *CC_OK* means success
     //
     //////////////////////////////////////////////////////////////////////////////
-    TCompletionCode CDriverInterfaceLinuxPerf::GetCopyEngineMask( CMetricsDevice& metricsDevice, uint64_t& copyEngineMask )
+    TCompletionCode CDriverInterfaceLinuxPerf::GetCopyEngineMask( [[maybe_unused]] CMetricsDevice& metricsDevice, [[maybe_unused]] uint64_t& copyEngineMask )
     {
         return CC_ERROR_NOT_SUPPORTED;
     }

@@ -40,11 +40,11 @@ namespace MetricsDiscoveryInternal
     {
     public:
         // API 1.13:
-        virtual const TMetricPrototypeParams_1_13*           GetParams( void ) const;
-        virtual IMetricPrototype_1_13*                       Clone( void );
-        virtual const TMetricPrototypeOptionDescriptor_1_13* GetOptionDescriptor( uint32_t index ) const;
-        virtual TCompletionCode                              SetOption( const TOptionDescriptorType optionType, const TTypedValue_1_0* typedValue );
-        virtual TCompletionCode                              ChangeNames( const char* symbolName, const char* shortName, const char* longName, const char* resultUnits );
+        virtual const TMetricPrototypeParams_1_13*           GetParams( void ) const final;
+        virtual IMetricPrototype_1_13*                       Clone( void ) final;
+        virtual const TMetricPrototypeOptionDescriptor_1_13* GetOptionDescriptor( uint32_t index ) const final;
+        virtual TCompletionCode                              SetOption( const TOptionDescriptorType optionType, const TTypedValue_1_0* typedValue ) final;
+        virtual TCompletionCode                              ChangeNames( const char* symbolName, const char* shortName, const char* longName, const char* resultUnits ) final;
 
     public:
         // Constructor & Destructor:

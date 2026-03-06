@@ -153,10 +153,10 @@ namespace MetricsDiscoveryInternal
     {
     public:
         // API 1.13:
-        virtual TCompletionCode Open();
-        virtual TCompletionCode AddMetric( IMetricPrototype_1_13* metricPrototype );
-        virtual TCompletionCode RemoveMetric( IMetricPrototype_1_13* metricPrototype );
-        virtual TCompletionCode Finalize();
+        virtual TCompletionCode Open() final;
+        virtual TCompletionCode AddMetric( IMetricPrototype_1_13* metricPrototype ) final;
+        virtual TCompletionCode RemoveMetric( IMetricPrototype_1_13* metricPrototype ) final;
+        virtual TCompletionCode Finalize() final;
         virtual IMetricLatest*  AddCustomMetric(
              const char*       symbolName,
              const char*       shortName,
@@ -177,23 +177,23 @@ namespace MetricsDiscoveryInternal
              const char*       normalizationEquation,
              const char*       maxValueEquation,
              const char*       signalName,
-             uint32_t          queryModeMask );
+             uint32_t          queryModeMask ) final;
 
         // API 1.5:
-        virtual TCompletionCode CalculateMetrics( const uint8_t* rawData, uint32_t rawDataSize, TTypedValue_1_0* out, uint32_t outSize, uint32_t* outReportCount, TTypedValue_1_0* outMaxValues, uint32_t outMaxValuesSize );
+        virtual TCompletionCode CalculateMetrics( const uint8_t* rawData, uint32_t rawDataSize, TTypedValue_1_0* out, uint32_t outSize, uint32_t* outReportCount, TTypedValue_1_0* outMaxValues, uint32_t outMaxValuesSize ) final;
 
         // API 1.1:
-        virtual TCompletionCode SetApiFiltering( uint32_t apiMask );
-        virtual TCompletionCode CalculateMetrics( const uint8_t* rawData, uint32_t rawDataSize, TTypedValue_1_0* out, uint32_t outSize, uint32_t* outReportCount, bool enableContextFiltering );
-        virtual TCompletionCode CalculateIoMeasurementInformation( TTypedValue_1_0* out, uint32_t outSize );
+        virtual TCompletionCode SetApiFiltering( uint32_t apiMask ) final;
+        virtual TCompletionCode CalculateMetrics( const uint8_t* rawData, uint32_t rawDataSize, TTypedValue_1_0* out, uint32_t outSize, uint32_t* outReportCount, bool enableContextFiltering ) final;
+        virtual TCompletionCode CalculateIoMeasurementInformation( TTypedValue_1_0* out, uint32_t outSize ) final;
 
         // API 1.0:
-        virtual TMetricSetParamsLatest* GetParams( void );
-        virtual IMetricLatest*          GetMetric( uint32_t index );
-        virtual IInformationLatest*     GetInformation( uint32_t index );
-        virtual IMetricSetLatest*       GetComplementaryMetricSet( uint32_t index );
-        virtual TCompletionCode         Activate( void );   // To enable this configuration before query instance is created or IO stream is opened
-        virtual TCompletionCode         Deactivate( void ); // To disable this configuration after query instance is created or IO stream is closed
+        virtual TMetricSetParamsLatest* GetParams( void ) final;
+        virtual IMetricLatest*          GetMetric( uint32_t index ) final;
+        virtual IInformationLatest*     GetInformation( uint32_t index ) final;
+        virtual IMetricSetLatest*       GetComplementaryMetricSet( uint32_t index ) final;
+        virtual TCompletionCode         Activate( void ) final;   // To enable this configuration before query instance is created or IO stream is opened
+        virtual TCompletionCode         Deactivate( void ) final; // To disable this configuration after query instance is created or IO stream is closed
         virtual IMetricLatest*          AddCustomMetric(
                      const char*       symbolName,
                      const char*       shortName,
@@ -213,10 +213,10 @@ namespace MetricsDiscoveryInternal
                      const char*       queryReadEquation,
                      const char*       normalizationEquation,
                      const char*       maxValueEquation,
-                     const char*       signalName );
+                     const char*       signalName ) final;
 
         // Internal API (IInternalMetricSet):
-        virtual IMetricLatest* AddCustomMetric( TAddCustomMetricParams* params );
+        virtual IMetricLatest* AddCustomMetric( TAddCustomMetricParams* params ) final;
 
     public:
         // Constructor & Destructor:

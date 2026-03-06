@@ -131,10 +131,10 @@ namespace MetricsDiscoveryInternal
     {
     public:
         // Calculation.
-        virtual void            ResetContext( TCalculationContext& context );
-        virtual TCompletionCode PrepareContext( TCalculationContext& context );
-        virtual bool            CalculateNextReport( TCalculationContext& context );
-        virtual bool            CalculateNextAsyncReport( TCalculationContext& context );
+        virtual void            ResetContext( TCalculationContext& context ) final;
+        virtual TCompletionCode PrepareContext( TCalculationContext& context ) final;
+        virtual bool            CalculateNextReport( TCalculationContext& context ) final;
+        virtual bool            CalculateNextAsyncReport( TCalculationContext& context ) final;
 
     private:
         int32_t GetInformationIndex( const char* symbolName, CMetricSet* set );

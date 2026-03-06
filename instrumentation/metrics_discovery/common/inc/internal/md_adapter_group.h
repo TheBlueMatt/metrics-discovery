@@ -44,12 +44,15 @@ namespace MetricsDiscoveryInternal
     class CAdapterGroup : public IAdapterGroupLatest
     {
     public:
-        virtual IAdapterLatest*                  GetAdapter( uint32_t index );
-        virtual const TAdapterGroupParamsLatest* GetParams() const;
-        virtual TCompletionCode                  Close();
-        virtual TCompletionCode                  OpenOfflineMetricsDeviceFromBuffer( uint8_t* buffer, uint32_t bufferSize, IMetricsDevice_1_13** metricsDevice );
-        virtual TCompletionCode                  CloseOfflineMetricsDevice( IMetricsDevice_1_13* metricsDevice );
-        virtual TCompletionCode                  SaveMetricsDeviceToBuffer( IMetricsDevice_1_13* metricsDevice, IMetricSet_1_13** metricSets, uint32_t metricSetCount, uint8_t* buffer, uint32_t* bufferSize, const uint32_t minMajorApiVersion, const uint32_t minMinorApiVersion );
+        // API 1.14:
+        virtual TCompletionCode OpenOfflineMetricsDeviceFromBuffer( uint8_t* buffer, uint32_t bufferSize, IMetricsDevice_1_13** metricsDevice ) final;
+        virtual TCompletionCode CloseOfflineMetricsDevice( IMetricsDevice_1_13* metricsDevice ) final;
+        virtual TCompletionCode SaveMetricsDeviceToBuffer( IMetricsDevice_1_13* metricsDevice, IMetricSet_1_13** metricSets, uint32_t metricSetCount, uint8_t* buffer, uint32_t* bufferSize, const uint32_t minMajorApiVersion, const uint32_t minMinorApiVersion ) final;
+
+        // API 1.6:
+        virtual IAdapterLatest*                  GetAdapter( uint32_t index ) final;
+        virtual const TAdapterGroupParamsLatest* GetParams() const final;
+        virtual TCompletionCode                  Close() final;
 
     public:
         // Non-API:

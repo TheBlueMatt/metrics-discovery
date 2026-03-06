@@ -58,21 +58,20 @@ namespace MetricsDiscoveryInternal
     class CMetricsDevice : public IMetricsDeviceLatest
     {
     public:
-        virtual IConcurrentGroupLatest* GetConcurrentGroup( uint32_t index );
-
         // API 1.10:
-        virtual TCompletionCode GetGpuCpuTimestamps( uint64_t* gpuTimestampNs, uint64_t* cpuTimestampNs, uint32_t* cpuId, uint64_t* correlationIndicatorNs );
+        virtual TCompletionCode GetGpuCpuTimestamps( uint64_t* gpuTimestampNs, uint64_t* cpuTimestampNs, uint32_t* cpuId, uint64_t* correlationIndicatorNs ) final;
 
         // API 1.2:
-        virtual IOverride_1_2* GetOverride( uint32_t index );
-        virtual IOverride_1_2* GetOverrideByName( const char* symbolName );
+        virtual IOverride_1_2* GetOverride( uint32_t index ) final;
+        virtual IOverride_1_2* GetOverrideByName( const char* symbolName ) final;
 
         // API 1.0:
-        virtual TMetricsDeviceParams_1_2* GetParams( void );
-        virtual TGlobalSymbolLatest*      GetGlobalSymbol( uint32_t index );
-        virtual TTypedValueLatest*        GetGlobalSymbolValueByName( const char* name );
-        virtual TCompletionCode           GetLastError();
-        virtual TCompletionCode           GetGpuCpuTimestamps( uint64_t* gpuTimestampNs, uint64_t* cpuTimestampNs, uint32_t* cpuId );
+        virtual TMetricsDeviceParamsLatest* GetParams( void ) final;
+        virtual IConcurrentGroupLatest*     GetConcurrentGroup( uint32_t index ) final;
+        virtual TGlobalSymbolLatest*        GetGlobalSymbol( uint32_t index ) final;
+        virtual TTypedValueLatest*          GetGlobalSymbolValueByName( const char* name ) final;
+        virtual TCompletionCode             GetLastError() final;
+        virtual TCompletionCode             GetGpuCpuTimestamps( uint64_t* gpuTimestampNs, uint64_t* cpuTimestampNs, uint32_t* cpuId ) final;
 
     public:
         // Constructor & Destructor:

@@ -1157,7 +1157,7 @@ namespace MetricsDiscoveryInternal
     //
     //////////////////////////////////////////////////////////////////////////////
     template <>
-    uint32_t CMetricPrototypeManager<METRIC_PROTOTYPE_MANAGER_TYPE_OAMERT>::GetPesOffset( CConcurrentGroup& concurrentGroup )
+    uint32_t CMetricPrototypeManager<METRIC_PROTOTYPE_MANAGER_TYPE_OAMERT>::GetPesOffset( [[maybe_unused]] CConcurrentGroup& concurrentGroup )
     {
         return 0x145340;
     }
@@ -1181,7 +1181,7 @@ namespace MetricsDiscoveryInternal
     //
     //////////////////////////////////////////////////////////////////////////////
     template <TMetricPrototypeManagerType T>
-    uint32_t CMetricPrototypeManager<T>::GetPesOffset( CConcurrentGroup& concurrentGroup )
+    uint32_t CMetricPrototypeManager<T>::GetPesOffset( [[maybe_unused]] CConcurrentGroup& concurrentGroup )
     {
         // PES group is supported for OAM/MERT units only.
         return 0;
@@ -1262,7 +1262,7 @@ namespace MetricsDiscoveryInternal
     //
     //////////////////////////////////////////////////////////////////////////////
     template <>
-    THwEventGroup CMetricPrototypeManager<METRIC_PROTOTYPE_MANAGER_TYPE_OAM>::GetHwEventGroup( const THwEvent& hwEvent )
+    THwEventGroup CMetricPrototypeManager<METRIC_PROTOTYPE_MANAGER_TYPE_OAM>::GetHwEventGroup( [[maybe_unused]] const THwEvent& hwEvent )
     {
         return HW_EVENT_GROUP_FIRST;
     }
@@ -1286,7 +1286,7 @@ namespace MetricsDiscoveryInternal
     //
     //////////////////////////////////////////////////////////////////////////////
     template <>
-    THwEventGroup CMetricPrototypeManager<METRIC_PROTOTYPE_MANAGER_TYPE_OAMERT>::GetHwEventGroup( const THwEvent& hwEvent )
+    THwEventGroup CMetricPrototypeManager<METRIC_PROTOTYPE_MANAGER_TYPE_OAMERT>::GetHwEventGroup( [[maybe_unused]] const THwEvent& hwEvent )
     {
         return HW_EVENT_GROUP_FIRST;
     }
@@ -1449,12 +1449,12 @@ namespace MetricsDiscoveryInternal
     //////////////////////////////////////////////////////////////////////////////
     template <>
     TCompletionCode CMetricPrototypeManager<METRIC_PROTOTYPE_MANAGER_TYPE_OAM>::AppendPesConfiguration(
-        const THwEvent&    hwEvent,
-        const uint64_t     pesProgramming,
-        std::vector<bool>& pesProgrammed,
-        uint32_t           flexProgramming[],
-        uint32_t&          snapshotReportOffsets,
-        uint32_t&          deltaReportOffsets )
+        const THwEvent&            hwEvent,
+        const uint64_t             pesProgramming,
+        std::vector<bool>&         pesProgrammed,
+        [[maybe_unused]] uint32_t  flexProgramming[],
+        uint32_t&                  snapshotReportOffsets,
+        [[maybe_unused]] uint32_t& deltaReportOffsets )
     {
         const uint32_t lowerPesProgramming = static_cast<uint32_t>( pesProgramming );
         const uint32_t upperPesProgramming = static_cast<uint32_t>( pesProgramming >> 32 );
@@ -1509,12 +1509,12 @@ namespace MetricsDiscoveryInternal
     //////////////////////////////////////////////////////////////////////////////
     template <>
     TCompletionCode CMetricPrototypeManager<METRIC_PROTOTYPE_MANAGER_TYPE_OAMERT>::AppendPesConfiguration(
-        const THwEvent&    hwEvent,
-        const uint64_t     pesProgramming,
-        std::vector<bool>& pesProgrammed,
-        uint32_t           flexProgramming[],
-        uint32_t&          snapshotReportOffsets,
-        uint32_t&          deltaReportOffsets )
+        const THwEvent&            hwEvent,
+        const uint64_t             pesProgramming,
+        std::vector<bool>&         pesProgrammed,
+        [[maybe_unused]] uint32_t  flexProgramming[],
+        uint32_t&                  snapshotReportOffsets,
+        [[maybe_unused]] uint32_t& deltaReportOffsets )
     {
         const uint32_t lowerPesProgramming = static_cast<uint32_t>( pesProgramming );
         const uint32_t upperPesProgramming = static_cast<uint32_t>( pesProgramming >> 32 );
@@ -1608,6 +1608,8 @@ namespace MetricsDiscoveryInternal
     template <TMetricPrototypeManagerType T>
     TCompletionCode CMetricPrototypeManager<T>::AppendFlexConfiguration( const uint32_t flexProgramming[] )
     {
+        (void) flexProgramming; // In template methods [[maybe_unused]] is ignored by older GCC versions.
+
         // Flex configuration is supported for OA unit only.
         return CC_OK;
     }
@@ -1654,13 +1656,13 @@ namespace MetricsDiscoveryInternal
         switch( group )
         {
             case HW_EVENT_GROUP_FIRST:
-                return FIRST_EVENT_GROUP_VECTOR_INCREASE;
+                return m_maxFirstEventGroupPesCount;
 
             case HW_EVENT_GROUP_SECOND:
-                return SECOND_EVENT_GROUP_VECTOR_INCREASE;
+                return m_maxSecondEventGroupPesCount;
 
             case HW_EVENT_GROUP_FLEX:
-                return FLEX_EVENT_GROUP_VECTOR_INCREASE;
+                return m_maxFlexEventGroupPesCount;
 
             default:
                 MD_ASSERT( false );

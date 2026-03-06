@@ -266,8 +266,8 @@ namespace MetricsDiscoveryInternal
         CAdapterHandleLinux( int32_t adapterHandle );
         virtual ~CAdapterHandleLinux();
 
-        virtual TCompletionCode Close( const uint32_t adapterId );
-        virtual bool            IsValid() const;
+        virtual TCompletionCode Close( const uint32_t adapterId ) final;
+        virtual bool            IsValid() const final;
 
         operator int() const;
 
@@ -289,7 +289,7 @@ namespace MetricsDiscoveryInternal
     class CDriverInterfaceLinuxCommon : public CDriverInterface
     {
     public: // Constructor & Destructor
-        CDriverInterfaceLinuxCommon( CAdapterHandle& adapterHandle, const TDrmVersion drmVersion );
+        CDriverInterfaceLinuxCommon( CAdapterHandle& adapterHandle, const TDrmVersion version );
         virtual ~CDriverInterfaceLinuxCommon();
 
         CDriverInterfaceLinuxCommon( const CDriverInterfaceLinuxCommon& )            = delete; // Delete copy-constructor
@@ -308,46 +308,46 @@ namespace MetricsDiscoveryInternal
         virtual TCompletionCode GetSubsliceMask( int64_t& subsliceMask, CMetricsDevice& metricsDevice )                     = 0;
 
         // General
-        virtual TCompletionCode ForceSupportDisable();
-        virtual TCompletionCode SendSupportEnableEscape( bool enable );
-        virtual TCompletionCode SendDeviceInfoParamEscape( GTDI_DEVICE_PARAM param, GTDIDeviceInfoParamExtOut& out, CMetricsDevice& metricsDevice );
-        virtual TCompletionCode GetMaxMinOaBufferSize( const GTDI_OA_BUFFER_TYPE oaBufferType, const GTDI_DEVICE_PARAM param, GTDIDeviceInfoParamExtOut& out, CMetricsDevice& metricsDevice );
-        virtual TCompletionCode SendPmRegsConfig( TRegister** regVector, const uint32_t regCount, const uint32_t subDeviceIndex, const GTDI_OA_BUFFER_TYPE oaBufferType );
-        virtual TCompletionCode SendReadRegsConfig( TRegister** regVector, uint32_t regCount );
-        virtual TCompletionCode GetPmRegsConfigHandles( uint32_t* oaConfigHandle, uint32_t* rrConfigHandle );
-        virtual TCompletionCode ValidatePmRegsConfig( TRegister* regVector, uint32_t regCount, uint32_t platformId );
+        virtual TCompletionCode ForceSupportDisable() final;
+        virtual TCompletionCode SendSupportEnableEscape( bool enable ) final;
+        virtual TCompletionCode SendDeviceInfoParamEscape( GTDI_DEVICE_PARAM param, GTDIDeviceInfoParamExtOut& out, CMetricsDevice& metricsDevice ) final;
+        virtual TCompletionCode GetMaxMinOaBufferSize( const GTDI_OA_BUFFER_TYPE oaBufferType, const GTDI_DEVICE_PARAM param, GTDIDeviceInfoParamExtOut& out, CMetricsDevice& metricsDevice ) final;
+        virtual TCompletionCode SendPmRegsConfig( std::vector<TRegister*>& pmRegs, const uint32_t subDeviceIndex, const GTDI_OA_BUFFER_TYPE oaBufferType, const TReportType reportType ) final;
+        virtual TCompletionCode SendReadRegsConfig( TRegister** regVector, uint32_t regCount ) final;
+        virtual TCompletionCode GetPmRegsConfigHandles( uint32_t* oaConfigHandle, uint32_t* rrConfigHandle ) final;
+        virtual TCompletionCode ValidatePmRegsConfig( TRegister* regVector, uint32_t regCount, uint32_t platformId ) final;
         virtual TCompletionCode GetGpuCpuTimestamps( CMetricsDevice& device, uint64_t& gpuTimestamp, uint64_t& cpuTimestamp, uint32_t& cpuId, uint64_t& correlationIndicator ) = 0;
         virtual bool            IsTbsEngineValid( const TEngineParamsLatest& engineParams, const uint32_t requestedInstance = -1, const bool isOam = false ) const             = 0;
-        virtual TCompletionCode SendGetCtxIdTagsEscape( TGetCtxTagsIdParams* params );
-        virtual uint32_t        GetAdapterId();
-        virtual bool            IsOaBufferSupported( const GTDI_OA_BUFFER_TYPE oaBufferType, CMetricsDevice& metricsDevice );
+        virtual TCompletionCode SendGetCtxIdTagsEscape( TGetCtxTagsIdParams* params ) final;
+        virtual uint32_t        GetAdapterId() final;
+        virtual bool            IsOaBufferSupported( const GTDI_OA_BUFFER_TYPE oaBufferType, CMetricsDevice& metricsDevice ) final;
         TCompletionCode         GetOaTimestamp( const uint64_t csTimestamp, uint64_t& oaTimestamp );
 
         // Synchronization
-        virtual TCompletionCode LockConcurrentGroup( const char* name, void** semaphore );
-        virtual TCompletionCode UnlockConcurrentGroup( const char* name, void** semaphore );
+        virtual TCompletionCode LockConcurrentGroup( const char* name, void** semaphore ) final;
+        virtual TCompletionCode UnlockConcurrentGroup( const char* name, void** semaphore ) final;
 
         // Stream
-        virtual TCompletionCode OpenIoStream( COAConcurrentGroup& oaConcurrentGroup, const uint32_t processId, uint32_t& nsTimerPeriod, uint32_t& bufferSize );
-        virtual TCompletionCode ReadIoStream( COAConcurrentGroup& oaConcurrentGroup, char* reportData, uint32_t& reportsCount, uint32_t& frequency, GTDIReadCounterStreamExceptions& exceptions );
-        virtual TCompletionCode CloseIoStream( COAConcurrentGroup& oaConcurrentGroup );
-        virtual TCompletionCode HandleIoStreamExceptions( COAConcurrentGroup& oaConcurrentGroup, const uint32_t processId, uint32_t& reportCount, const GTDIReadCounterStreamExceptions exceptions );
-        virtual TCompletionCode WaitForIoStreamReports( COAConcurrentGroup& oaConcurrentGroup, const uint32_t milliseconds );
-        virtual bool            IsIoMeasurementInfoAvailable( const TIoMeasurementInfoType ioMeasurementInfoType );
-        virtual bool            IsStreamTypeSupported( const TStreamType streamType );
+        virtual TCompletionCode OpenIoStream( COAConcurrentGroup& oaConcurrentGroup, const uint32_t processId, uint32_t& nsTimerPeriod, uint32_t& bufferSize ) final;
+        virtual TCompletionCode ReadIoStream( COAConcurrentGroup& oaConcurrentGroup, char* reportData, uint32_t& reportsCount, uint32_t& frequency, GTDIReadCounterStreamExceptions& exceptions ) final;
+        virtual TCompletionCode CloseIoStream( COAConcurrentGroup& oaConcurrentGroup ) final;
+        virtual TCompletionCode HandleIoStreamExceptions( COAConcurrentGroup& oaConcurrentGroup, const uint32_t processId, uint32_t& reportCount, const GTDIReadCounterStreamExceptions exceptions ) final;
+        virtual TCompletionCode WaitForIoStreamReports( COAConcurrentGroup& oaConcurrentGroup, const uint32_t milliseconds ) final;
+        virtual bool            IsIoMeasurementInfoAvailable( const TIoMeasurementInfoType ioMeasurementInfoType ) final;
+        virtual bool            IsStreamTypeSupported( const TStreamType streamType ) final;
 
         // Overrides
-        virtual TCompletionCode SetFrequencyOverride( CMetricsDevice& device, const TSetFrequencyOverrideParams_1_2& params );
-        virtual TCompletionCode SetQueryOverride( TOverrideType overrideType, uint32_t oaBufferSize, const TSetQueryOverrideParams_1_2& params );
-        virtual TCompletionCode SetFreqChangeReportsOverride( bool enable );
-        virtual bool            IsOverrideAvailable( TOverrideType overrideType );
+        virtual TCompletionCode SetFrequencyOverride( CMetricsDevice& device, const TSetFrequencyOverrideParams_1_2& params ) final;
+        virtual TCompletionCode SetQueryOverride( TOverrideType overrideType, uint32_t oaBufferSize, const TSetQueryOverrideParams_1_2& params ) final;
+        virtual TCompletionCode SetFreqChangeReportsOverride( bool enable ) final;
+        virtual bool            IsOverrideAvailable( TOverrideType overrideType ) final;
         virtual bool            IsSubDeviceSupported()                         = 0;
         virtual TCompletionCode EnumerateSubDevices( CSubDevices& subDevices ) = 0;
-        virtual TQueryMode      GetQueryModeOverride();
+        virtual TQueryMode      GetQueryModeOverride() final;
 
     protected:
         virtual bool CreateContext() = 0;
-        virtual void DeleteContext();
+        virtual void DeleteContext() final;
 
     protected:
         // OA
@@ -355,7 +355,7 @@ namespace MetricsDiscoveryInternal
         virtual TCompletionCode ReadOaStream( CMetricsDevice& metricsDevice, uint32_t reportSize, uint32_t reportsToRead, char* reportData, uint32_t& readBytes, GTDIReadCounterStreamExceptions& exceptions )                                 = 0;
         TCompletionCode         CloseOaStream( CMetricsDevice& metricsDevice );
         TCompletionCode         WaitForOaStreamReports( CMetricsDevice& metricsDevice, uint32_t timeoutMs );
-        std::string             GenerateQueryGuid( const uint32_t subDeviceIndex );
+        std::string             GenerateQueryGuid( const uint32_t subDeviceIndex, const TReportType reportType );
         virtual TCompletionCode AddOaConfig( TRegister** regVector, const uint32_t regCount, const uint32_t subDeviceIndex, const char* requestedGuid, int32_t& addedConfigId ) = 0;
         virtual TCompletionCode RemoveOaConfig( int32_t oaConfigId )                                                                                                            = 0;
         TCompletionCode         RemoveOaConfigQuery( const char* guid );

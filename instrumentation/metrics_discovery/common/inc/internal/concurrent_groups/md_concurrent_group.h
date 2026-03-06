@@ -34,12 +34,11 @@ namespace MetricsDiscoveryInternal
     ///////////////////////////////////////////////////////////////////////////////
     class CMetricsDevice;
     class CMetricSet;
+    class CMetricEnumerator;
     class CInformation;
 
     struct SArchEvent;
     using TArchEvent = SArchEvent;
-
-    class CMetricEnumerator;
 
     //////////////////////////////////////////////////////////////////////////////
     //
@@ -57,11 +56,12 @@ namespace MetricsDiscoveryInternal
         // API 1.13:
         using IConcurrentGroup_1_13::AddMetricSet; // To avoid hiding by non-API function
 
-        virtual TConcurrentGroupParamsLatest* GetParams( void );
-        virtual IMetricSetLatest*             GetMetricSet( uint32_t index );
+        // API 1.0:
+        virtual TConcurrentGroupParamsLatest* GetParams( void ) final;
+        virtual IMetricSetLatest*             GetMetricSet( uint32_t index ) final;
 
         // Internal API (IInternalConcurrentGroup):
-        virtual IMetricSetLatest* AddCustomMetricSet( TAddCustomMetricSetParams* params, IMetricSetLatest* referenceMetricSet, bool copyInformationOnly );
+        virtual IMetricSetLatest* AddCustomMetricSet( TAddCustomMetricSetParams* params, IMetricSetLatest* referenceMetricSet, bool copyInformationOnly ) override;
 
     public:
         // Constructor & Destructor:

@@ -34,12 +34,11 @@ namespace MetricsDiscoveryInternal
     //     params memory (strings).
     //
     // Input:
-    //     CAdapterGroup&              adapterGroup  - parent adapter group object
     //     const TAdapterParamsLatest& params        - filled adapter params
     //     CAdapterHandle&             adapterHandle - adapter handle connected with this adapter
     //
     //////////////////////////////////////////////////////////////////////////////
-    CAdapter::CAdapter( CAdapterGroup& adapterGroup, const TAdapterParamsLatest& params, CAdapterHandle& adapterHandle )
+    CAdapter::CAdapter( const TAdapterParamsLatest& params, CAdapterHandle& adapterHandle )
         : m_adapterId( IU_ADAPTER_ID_UNKNOWN )
         , m_params( params )
         , m_adapterHandle( &adapterHandle )
@@ -48,7 +47,6 @@ namespace MetricsDiscoveryInternal
         , m_subDevices( *this )
         , m_subDeviceParams{}
         , m_engineParams{}
-        , m_adapterGroup( adapterGroup )
     {
         if( CreateDriverInterface() == CC_OK )
         {
@@ -73,11 +71,8 @@ namespace MetricsDiscoveryInternal
     // Description:
     //     Constructor.
     //
-    // Input:
-    //     CAdapterGroup& adapterGroup - parent adapter group object
-    //
     //////////////////////////////////////////////////////////////////////////////
-    CAdapter::CAdapter( CAdapterGroup& adapterGroup )
+    CAdapter::CAdapter()
         : m_adapterId( IU_ADAPTER_ID_UNKNOWN )
         , m_params{}
         , m_adapterHandle( nullptr )
@@ -86,7 +81,6 @@ namespace MetricsDiscoveryInternal
         , m_subDevices( *this )
         , m_subDeviceParams{}
         , m_engineParams{}
-        , m_adapterGroup( adapterGroup )
     {
         MD_LOG( LOG_INFO, "Offline adapter" );
     }
@@ -402,7 +396,7 @@ namespace MetricsDiscoveryInternal
     //////////////////////////////////////////////////////////////////////////////
     TCompletionCode CAdapter::OpenMetricsDevice( IMetricsDevice_1_5** metricsDevice )
     {
-        return OpenMetricsDeviceByIndex( (CMetricsDevice**) metricsDevice, MD_ROOT_DEVICE_INDEX );
+        return OpenMetricsDeviceByIndex( reinterpret_cast<CMetricsDevice**>( metricsDevice ), MD_ROOT_DEVICE_INDEX );
     }
 
     //////////////////////////////////////////////////////////////////////////////
@@ -427,7 +421,7 @@ namespace MetricsDiscoveryInternal
     //////////////////////////////////////////////////////////////////////////////
     TCompletionCode CAdapter::OpenMetricsDevice( IMetricsDevice_1_10** metricsDevice )
     {
-        return OpenMetricsDeviceByIndex( (CMetricsDevice**) metricsDevice, MD_ROOT_DEVICE_INDEX );
+        return OpenMetricsDeviceByIndex( reinterpret_cast<CMetricsDevice**>( metricsDevice ), MD_ROOT_DEVICE_INDEX );
     }
 
     //////////////////////////////////////////////////////////////////////////////
@@ -452,7 +446,7 @@ namespace MetricsDiscoveryInternal
     //////////////////////////////////////////////////////////////////////////////
     TCompletionCode CAdapter::OpenMetricsDevice( IMetricsDevice_1_11** metricsDevice )
     {
-        return OpenMetricsDeviceByIndex( (CMetricsDevice**) metricsDevice, MD_ROOT_DEVICE_INDEX );
+        return OpenMetricsDeviceByIndex( reinterpret_cast<CMetricsDevice**>( metricsDevice ), MD_ROOT_DEVICE_INDEX );
     }
 
     //////////////////////////////////////////////////////////////////////////////
@@ -477,7 +471,7 @@ namespace MetricsDiscoveryInternal
     //////////////////////////////////////////////////////////////////////////////
     TCompletionCode CAdapter::OpenMetricsDevice( IMetricsDevice_1_13** metricsDevice )
     {
-        return OpenMetricsDeviceByIndex( (CMetricsDevice**) metricsDevice, MD_ROOT_DEVICE_INDEX );
+        return OpenMetricsDeviceByIndex( reinterpret_cast<CMetricsDevice**>( metricsDevice ), MD_ROOT_DEVICE_INDEX );
     }
 
     //////////////////////////////////////////////////////////////////////////////
@@ -503,7 +497,7 @@ namespace MetricsDiscoveryInternal
     //     TCompletionCode                       - CC_OK or CC_ALREADY_INITIALIZED means success
     //
     //////////////////////////////////////////////////////////////////////////////
-    TCompletionCode CAdapter::OpenMetricsDeviceFromFileByIndex( const char* fileName, void* openParams, CMetricsDevice** metricsDevice, const uint32_t subDeviceIndex )
+    TCompletionCode CAdapter::OpenMetricsDeviceFromFileByIndex( const char* fileName, [[maybe_unused]] void* openParams, CMetricsDevice** metricsDevice, const uint32_t subDeviceIndex )
     {
         MD_LOG_ENTER_A( m_adapterId );
         MD_CHECK_PTR_RET_A( m_adapterId, fileName, CC_ERROR_INVALID_PARAMETER );
@@ -587,7 +581,7 @@ namespace MetricsDiscoveryInternal
     //////////////////////////////////////////////////////////////////////////////
     TCompletionCode CAdapter::OpenMetricsDeviceFromFile( const char* fileName, void* openParams, IMetricsDevice_1_5** metricsDevice )
     {
-        return OpenMetricsDeviceFromFileByIndex( fileName, openParams, (CMetricsDevice**) metricsDevice, MD_ROOT_DEVICE_INDEX );
+        return OpenMetricsDeviceFromFileByIndex( fileName, openParams, reinterpret_cast<CMetricsDevice**>( metricsDevice ), MD_ROOT_DEVICE_INDEX );
     }
 
     //////////////////////////////////////////////////////////////////////////////
@@ -614,7 +608,7 @@ namespace MetricsDiscoveryInternal
     //////////////////////////////////////////////////////////////////////////////
     TCompletionCode CAdapter::OpenMetricsDeviceFromFile( const char* fileName, void* openParams, IMetricsDevice_1_10** metricsDevice )
     {
-        return OpenMetricsDeviceFromFileByIndex( fileName, openParams, (CMetricsDevice**) metricsDevice, MD_ROOT_DEVICE_INDEX );
+        return OpenMetricsDeviceFromFileByIndex( fileName, openParams, reinterpret_cast<CMetricsDevice**>( metricsDevice ), MD_ROOT_DEVICE_INDEX );
     }
 
     //////////////////////////////////////////////////////////////////////////////
@@ -641,7 +635,7 @@ namespace MetricsDiscoveryInternal
     //////////////////////////////////////////////////////////////////////////////
     TCompletionCode CAdapter::OpenMetricsDeviceFromFile( const char* fileName, void* openParams, IMetricsDevice_1_11** metricsDevice )
     {
-        return OpenMetricsDeviceFromFileByIndex( fileName, openParams, (CMetricsDevice**) metricsDevice, MD_ROOT_DEVICE_INDEX );
+        return OpenMetricsDeviceFromFileByIndex( fileName, openParams, reinterpret_cast<CMetricsDevice**>( metricsDevice ), MD_ROOT_DEVICE_INDEX );
     }
 
     //////////////////////////////////////////////////////////////////////////////
@@ -668,7 +662,7 @@ namespace MetricsDiscoveryInternal
     //////////////////////////////////////////////////////////////////////////////
     TCompletionCode CAdapter::OpenMetricsDeviceFromFile( const char* fileName, void* openParams, IMetricsDevice_1_13** metricsDevice )
     {
-        return OpenMetricsDeviceFromFileByIndex( fileName, openParams, (CMetricsDevice**) metricsDevice, MD_ROOT_DEVICE_INDEX );
+        return OpenMetricsDeviceFromFileByIndex( fileName, openParams, reinterpret_cast<CMetricsDevice**>( metricsDevice ), MD_ROOT_DEVICE_INDEX );
     }
 
     //////////////////////////////////////////////////////////////////////////////
@@ -757,7 +751,7 @@ namespace MetricsDiscoveryInternal
     //////////////////////////////////////////////////////////////////////////////
     TCompletionCode CAdapter::OpenMetricsSubDevice( const uint32_t subDeviceIndex, IMetricsDevice_1_5** metricsDevice )
     {
-        return OpenMetricsSubDevice( subDeviceIndex, (CMetricsDevice**) metricsDevice );
+        return OpenMetricsSubDevice( subDeviceIndex, reinterpret_cast<CMetricsDevice**>( metricsDevice ) );
     }
 
     //////////////////////////////////////////////////////////////////////////////
@@ -781,7 +775,7 @@ namespace MetricsDiscoveryInternal
     //////////////////////////////////////////////////////////////////////////////
     TCompletionCode CAdapter::OpenMetricsSubDevice( const uint32_t subDeviceIndex, IMetricsDevice_1_10** metricsDevice )
     {
-        return OpenMetricsSubDevice( subDeviceIndex, (CMetricsDevice**) metricsDevice );
+        return OpenMetricsSubDevice( subDeviceIndex, reinterpret_cast<CMetricsDevice**>( metricsDevice ) );
     }
 
     //////////////////////////////////////////////////////////////////////////////
@@ -805,7 +799,7 @@ namespace MetricsDiscoveryInternal
     //////////////////////////////////////////////////////////////////////////////
     TCompletionCode CAdapter::OpenMetricsSubDevice( const uint32_t subDeviceIndex, IMetricsDevice_1_11** metricsDevice )
     {
-        return OpenMetricsSubDevice( subDeviceIndex, (CMetricsDevice**) metricsDevice );
+        return OpenMetricsSubDevice( subDeviceIndex, reinterpret_cast<CMetricsDevice**>( metricsDevice ) );
     }
 
     //////////////////////////////////////////////////////////////////////////////
@@ -829,7 +823,7 @@ namespace MetricsDiscoveryInternal
     //////////////////////////////////////////////////////////////////////////////
     TCompletionCode CAdapter::OpenMetricsSubDevice( const uint32_t subDeviceIndex, IMetricsDevice_1_13** metricsDevice )
     {
-        return OpenMetricsSubDevice( subDeviceIndex, (CMetricsDevice**) metricsDevice );
+        return OpenMetricsSubDevice( subDeviceIndex, reinterpret_cast<CMetricsDevice**>( metricsDevice ) );
     }
 
     //////////////////////////////////////////////////////////////////////////////
@@ -927,7 +921,7 @@ namespace MetricsDiscoveryInternal
     //////////////////////////////////////////////////////////////////////////////
     TCompletionCode CAdapter::OpenMetricsSubDeviceFromFile( const uint32_t subDeviceIndex, const char* fileName, void* openParams, IMetricsDevice_1_5** metricsDevice )
     {
-        return OpenMetricsSubDeviceFromFile( subDeviceIndex, fileName, openParams, (CMetricsDevice**) metricsDevice );
+        return OpenMetricsSubDeviceFromFile( subDeviceIndex, fileName, openParams, reinterpret_cast<CMetricsDevice**>( metricsDevice ) );
     }
 
     //////////////////////////////////////////////////////////////////////////////
@@ -955,7 +949,7 @@ namespace MetricsDiscoveryInternal
     //////////////////////////////////////////////////////////////////////////////
     TCompletionCode CAdapter::OpenMetricsSubDeviceFromFile( const uint32_t subDeviceIndex, const char* fileName, void* openParams, IMetricsDevice_1_10** metricsDevice )
     {
-        return OpenMetricsSubDeviceFromFile( subDeviceIndex, fileName, openParams, (CMetricsDevice**) metricsDevice );
+        return OpenMetricsSubDeviceFromFile( subDeviceIndex, fileName, openParams, reinterpret_cast<CMetricsDevice**>( metricsDevice ) );
     }
 
     //////////////////////////////////////////////////////////////////////////////
@@ -983,7 +977,7 @@ namespace MetricsDiscoveryInternal
     //////////////////////////////////////////////////////////////////////////////
     TCompletionCode CAdapter::OpenMetricsSubDeviceFromFile( const uint32_t subDeviceIndex, const char* fileName, void* openParams, IMetricsDevice_1_11** metricsDevice )
     {
-        return OpenMetricsSubDeviceFromFile( subDeviceIndex, fileName, openParams, (CMetricsDevice**) metricsDevice );
+        return OpenMetricsSubDeviceFromFile( subDeviceIndex, fileName, openParams, reinterpret_cast<CMetricsDevice**>( metricsDevice ) );
     }
 
     //////////////////////////////////////////////////////////////////////////////
@@ -1011,7 +1005,7 @@ namespace MetricsDiscoveryInternal
     //////////////////////////////////////////////////////////////////////////////
     TCompletionCode CAdapter::OpenMetricsSubDeviceFromFile( const uint32_t subDeviceIndex, const char* fileName, void* openParams, IMetricsDevice_1_13** metricsDevice )
     {
-        return OpenMetricsSubDeviceFromFile( subDeviceIndex, fileName, openParams, (CMetricsDevice**) metricsDevice );
+        return OpenMetricsSubDeviceFromFile( subDeviceIndex, fileName, openParams, reinterpret_cast<CMetricsDevice**>( metricsDevice ) );
     }
 
     //////////////////////////////////////////////////////////////////////////////
@@ -1480,9 +1474,9 @@ namespace MetricsDiscoveryInternal
         MD_CHECK_PTR_RET_A( m_adapterId, m_driverInterface, CC_ERROR_NOT_SUPPORTED );
 
         TCompletionCode retVal      = CC_OK;
-        auto            enablePrint = []( bool enable )
+        auto            enablePrint = []( bool enableDriverSupport )
         {
-            return enable ? "enabling" : "disabling";
+            return enableDriverSupport ? "enabling" : "disabling";
         };
 
         if( m_driverInterface->IsSupportEnableRequired() )
